@@ -1,0 +1,14 @@
+Package: phenovisr
+Type: Package
+Title: Data-processing with phenological metrics
+Version: 1.0
+Date: 2017-12-05
+Author: Lucas M. Schnorr
+Maintainer: Lucas M. Schnorr <schnorr@inf.ufrgs.br>
+Description: The phenovisr package contains a set of
+   data-processing functions to create histograms of
+   phenological metrics (such as the green factor) for
+   a set of pictures.
+License: GPL3
+Imports: Rcpp (>= 0.12.14)
+LinkingTo: Rcpp
