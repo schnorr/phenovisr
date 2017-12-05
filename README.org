@@ -1,0 +1,14 @@
+* phenovisr package
+
+First, you need =devtools= package.
+
+#+begin_src R :results output :session :exports both
+install.package("devtools");
+#+end_src
+
+Then, install =phenovisr= like this:
+
+#+begin_src R :results output :session :exports both
+library(devtools);
+install_github("schnorr/phenovisr");
+#+end_src
