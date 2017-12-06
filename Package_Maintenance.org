@@ -1,0 +1,32 @@
+#+TITLE: Maintenance ORG file for phenovisr package
+#+AUTHOR: Lucas Mello Schnorr
+#+STARTUP: overview indent
+#+TAGS: noexport(n) deprecated(d)
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+
+The package has been created with Rcpp's version of =package.skeleton=,
+by running the following code. This is no longer necessary because the
+package has already been created and modified.
+
+#+begin_src R :results output :session :exports both
+library(Rcpp);
+Rcpp.package.skeleton("phenovisr");
+#+end_src
+
+Every time some new function is exported, we need to recompile the
+attributes in the following way, so our R API gets updated.
+
+#+begin_src R :results output :session :exports both
+library(Rcpp);
+compileAttributes("phenovisr");
+#+end_src
+
+The package can be checked and installed the following way (for
+development purposes only). Please note that the standard installation
+procedure [[./README.org][has already been described in the README file]].
+
+#+begin_src R :results output :session :exports both
+R CMD check phenovisr
+R CMD INSTALL phenovisr
+#+end_src
