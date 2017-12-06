@@ -24,7 +24,10 @@ compileAttributes("phenovisr");
 
 The package can be checked and installed the following way (for
 development purposes only). Please note that the standard installation
-procedure [[./README.org][has already been described in the README file]].
+procedure [[./README.org][has already been described in the README file]]. Note that the
+following commands should be executed considering the existence of a
+=phenovisr= directory with the contents of this repository. If you are
+within the aforementioned directory, replace phenovisr by the dot.
 
 #+begin_src R :results output :session :exports both
 R CMD check phenovisr
