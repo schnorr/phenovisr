@@ -19,8 +19,10 @@ attributes in the following way, so our R API gets updated.
 
 #+begin_src R :results output :session :exports both
 library(Rcpp);
-compileAttributes("phenovisr");
+compileAttributes(".");
 #+end_src
+
+#+RESULTS:
 
 The package can be checked and installed the following way (for
 development purposes only). Please note that the standard installation
