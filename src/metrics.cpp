@@ -20,7 +20,7 @@ static float get_H_average (unsigned char r, unsigned char g, unsigned char b)
   return 0;
 }
 
-float get_average (PGAMetricType type, unsigned char r, unsigned char g, unsigned char b)
+float get_metric (PGAMetricType type, unsigned char r, unsigned char g, unsigned char b)
 {
   switch (type){
   case Red: return get_red_average (r, g, b);
