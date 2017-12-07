@@ -41,8 +41,7 @@ void phenovis_read_mask(std::string maskname)
   global_mask = load_jpeg_image(maskname.c_str());
 }
 
-// [[Rcpp::export]]
-DataFrame phenovis_get_gcc_histogram(StringVector names, int number_of_bins)
+static DataFrame _phenovis_get_histogram(PGAMetricType type, StringVector names, int number_of_bins)
 {
   CharacterVector columnNames;
   columnNames.push_back("Width");
@@ -70,7 +69,7 @@ DataFrame phenovis_get_gcc_histogram(StringVector names, int number_of_bins)
     row.push_back(image->width);
     row.push_back(image->height);
     row.push_back(considered_pixels);
-    int *histogram = get_gcc_histogram (number_of_bins, Green, image);
+    int *histogram = get_histogram (type, number_of_bins, image);
     int j;
     for (j = 0; j < number_of_bins; j++){
       row.push_back(histogram[j]);
@@ -90,15 +89,12 @@ DataFrame phenovis_get_gcc_histogram(StringVector names, int number_of_bins)
 }
 
 // [[Rcpp::export]]
-DataFrame phenovis_get_histogram(int type, StringVector names, int number_of_bins)
+DataFrame phenovis_get_histogram(int mtype, StringVector names, int number_of_bins)
 {
-  switch (type){
-  case Red:
-  case Green:
-  case Blue:
-  case H:
-    return phenovis_get_gcc_histogram (names, number_of_bins);
-    break;
+  PGAMetricType type = static_cast<PGAMetricType>(mtype);
+  if (type < Undef){
+    return _phenovis_get_histogram (type, names, number_of_bins);
+  }else{
+    return DataFrame();
   }
-  return DataFrame();
 }
