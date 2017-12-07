@@ -11,6 +11,26 @@ using namespace Rcpp;
 static image_t *global_mask = NULL;
 
 // [[Rcpp::export]]
+int phenovis_red(){
+  return Red;
+}
+
+// [[Rcpp::export]]
+int phenovis_green(){
+  return Green;
+}
+
+// [[Rcpp::export]]
+int phenovis_blue(){
+  return Blue;
+}
+
+// [[Rcpp::export]]
+int phenovis_H(){
+  return H;
+}
+
+// [[Rcpp::export]]
 void phenovis_read_mask(std::string maskname)
 {
   if (global_mask){
