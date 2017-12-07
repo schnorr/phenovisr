@@ -1,12 +1,31 @@
-* phenovisr package
+#+STARTUP: overview indent
 
-First, you need =devtools= package.
+* Preliminaries (jpeg library)
 
-#+begin_src R :results output :session :exports both
-install.package("devtools");
+Install the system libraries used by =phenovisr=.
+
+** Linux/Debian Installation
+
+#+begin_src shell :results output
+sudo apt install libjpeg-dev
 #+end_src
 
-Then, install =phenovisr= like this:
+** Windows Installation (not tested yet)
+
+You'll need the [[http://gnuwin32.sourceforge.net/packages/jpeg.htm][Jpeg for Windows]] library. To install phenovisr
+correctly, the dynamic library must be called =libjpeg.dll= instead of
+the =jpeg-62.dll=. You need to make sure your compiler is capable to
+find this DLL in your system.
+
+* phenovisr package
+
+Then, you need =devtools= package.
+
+#+begin_src R :results output :session :exports both
+install.packages("devtools");
+#+end_src
+
+Finally, install =phenovisr= like this:
 
 #+begin_src R :results output :session :exports both
 library(devtools);
