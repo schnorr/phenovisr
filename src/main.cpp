@@ -90,7 +90,15 @@ DataFrame phenovis_get_gcc_histogram(StringVector names, int number_of_bins)
 }
 
 // [[Rcpp::export]]
-DataFrame phenovis_get_histogram(StringVector names, int number_of_bins)
+DataFrame phenovis_get_histogram(int type, StringVector names, int number_of_bins)
 {
-  return phenovis_get_gcc_histogram (names, number_of_bins);
+  switch (type){
+  case Red:
+  case Green:
+  case Blue:
+  case H:
+    return phenovis_get_gcc_histogram (names, number_of_bins);
+    break;
+  }
+  return DataFrame();
 }
