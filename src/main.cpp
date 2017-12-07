@@ -24,6 +24,12 @@ void phenovis_read_mask(std::string maskname)
 // [[Rcpp::export]]
 DataFrame phenovis_get_histogram(StringVector names, int number_of_bins)
 {
+  return phenovis_get_histogram (names, number_of_bins);
+}
+
+// [[Rcpp::export]]
+DataFrame phenovis_get_gcc_histogram(StringVector names, int number_of_bins)
+{
   CharacterVector columnNames;
   columnNames.push_back("Width");
   columnNames.push_back("Height");
