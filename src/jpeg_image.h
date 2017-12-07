@@ -3,7 +3,7 @@
 #include <Rcpp.h>
 #include <jpeglib.h>
 
-typedef enum { Red, Green, Blue, Undef } PGAMetricType;
+typedef enum { Red, Green, Blue, H, Undef } PGAMetricType;
 typedef struct image {
   unsigned char *image;
   int width;
