@@ -13,7 +13,7 @@ static int gcc_get_bin_for_pixel (PGAMetricType type, int grain, int i, image_t 
   return floor(value);
 }
 
-int *gcc_get_metric (int grain, PGAMetricType type, image_t *image)
+int *get_gcc_histogram (int grain, PGAMetricType type, image_t *image)
 {
   int *ret = (int*)malloc(grain * sizeof(int));
   bzero(ret, grain*sizeof(int));

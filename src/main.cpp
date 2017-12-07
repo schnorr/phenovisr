@@ -56,7 +56,7 @@ DataFrame phenovis_get_gcc_histogram(StringVector names, int number_of_bins)
     row.push_back(image->width);
     row.push_back(image->height);
     row.push_back(considered_pixels);
-    int *histogram = get_metric (number_of_bins, Green, image);
+    int *histogram = get_gcc_histogram (number_of_bins, Green, image);
     int j;
     for (j = 0; j < number_of_bins; j++){
       row.push_back(histogram[j]);

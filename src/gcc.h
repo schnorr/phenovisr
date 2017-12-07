@@ -6,6 +6,6 @@
 #include "jpeg_image.h"
 #include "metrics.h"
 
-int *gcc_get_metric (int grain, PGAMetricType type, image_t *image);
+int *get_gcc_histogram (int grain, PGAMetricType type, image_t *image);
 
 #endif
