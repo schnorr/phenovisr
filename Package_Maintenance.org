@@ -31,7 +31,13 @@ following commands should be executed considering the existence of a
 =phenovisr= directory with the contents of this repository. If you are
 within the aforementioned directory, replace phenovisr by the dot.
 
-#+begin_src R :results output :session :exports both
-R CMD check phenovisr
-R CMD INSTALL phenovisr
+#+begin_src shell :results output
+#R CMD check .
+R CMD INSTALL .
 #+end_src
+
+#+RESULTS:
+: g++  -I/usr/share/R/include -DNDEBUG  -I"/home/schnorr/R/x86_64-pc-linux-gnu-library/3.4/Rcpp/include"    -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-3.4.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c main.cpp -o main.o
+: g++ -shared -L/usr/lib/R/lib -Wl,-z,relro -o phenovisr.so RcppExports.o histogram.o jpeg_image.o main.o metrics.o -ljpeg -L/usr/lib/R/lib -lR
+
+
