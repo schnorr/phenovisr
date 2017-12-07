@@ -22,12 +22,6 @@ void phenovis_read_mask(std::string maskname)
 }
 
 // [[Rcpp::export]]
-DataFrame phenovis_get_histogram(StringVector names, int number_of_bins)
-{
-  return phenovis_get_gcc_histogram (names, number_of_bins);
-}
-
-// [[Rcpp::export]]
 DataFrame phenovis_get_gcc_histogram(StringVector names, int number_of_bins)
 {
   CharacterVector columnNames;
@@ -73,4 +67,10 @@ DataFrame phenovis_get_gcc_histogram(StringVector names, int number_of_bins)
   ret.attr("names") = columnNames;
   Function asDF("as.data.frame");
   return asDF(ret);
+}
+
+// [[Rcpp::export]]
+DataFrame phenovis_get_histogram(StringVector names, int number_of_bins)
+{
+  return phenovis_get_gcc_histogram (names, number_of_bins);
 }
