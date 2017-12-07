@@ -1,6 +1,6 @@
-#include "histogram.h"
+#include "gcc.h"
 
-int get_bin (PGAMetricType type, int grain, int i, image_t *image)
+int gcc_get_bin_for_pixel (PGAMetricType type, int grain, int i, image_t *image)
 {
   unsigned char *iimage = image->image;
   unsigned char r, g, b;
@@ -13,12 +13,12 @@ int get_bin (PGAMetricType type, int grain, int i, image_t *image)
   return floor(value);
 }
 
-int *get_metric(int grain, PGAMetricType type, image_t *image)
+int *gcc_get_metric (int grain, PGAMetricType type, image_t *image)
 {
   int *ret = (int*)malloc(grain * sizeof(int));
   bzero(ret, grain*sizeof(int));
   for (int i = 0; i < image->size; i = i+3){
-    int x = get_bin (type, grain, i, image);
+    int x = gcc_get_bin_for_pixel (type, grain, i, image);
     if (x >= 0) ret[x]++;
   }  
   return ret;
