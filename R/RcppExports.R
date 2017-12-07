@@ -9,3 +9,7 @@ phenovis_get_histogram <- function(names, number_of_bins) {
     .Call(`_phenovisr_phenovis_get_histogram`, names, number_of_bins)
 }
 
+phenovis_get_gcc_histogram <- function(names, number_of_bins) {
+    .Call(`_phenovisr_phenovis_get_gcc_histogram`, names, number_of_bins)
+}
+
