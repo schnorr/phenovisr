@@ -1,6 +1,6 @@
 #include "gcc.h"
 
-int gcc_get_bin_for_pixel (PGAMetricType type, int grain, int i, image_t *image)
+static int gcc_get_bin_for_pixel (PGAMetricType type, int grain, int i, image_t *image)
 {
   unsigned char *iimage = image->image;
   unsigned char r, g, b;
