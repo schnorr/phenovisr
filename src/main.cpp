@@ -4,7 +4,7 @@
 #include <math.h>
 #include "jpeg_image.h"
 #include "metrics.h"
-#include "histogram.h"
+#include "gcc.h"
 
 using namespace Rcpp;
 
