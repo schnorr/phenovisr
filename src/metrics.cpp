@@ -1,42 +1,43 @@
 #include "metrics.h"
 
-static float get_rcc (unsigned char r, unsigned char g, unsigned char b)
+static double get_rcc (unsigned char r, unsigned char g, unsigned char b)
 {
-  return (r+g+b) == 0 ? 0 : (float)r/(float)(r+g+b);
+  return (r+g+b) == 0 ? 0 : (double)r/(double)(r+g+b);
 }
 
-static float get_gcc (unsigned char r, unsigned char g, unsigned char b)
+static double get_gcc (unsigned char r, unsigned char g, unsigned char b)
 {
-  return (r+g+b) == 0 ? 0 : (float)g/(float)(r+g+b);
+  return (r+g+b) == 0 ? 0 : (double)g/(double)(r+g+b);
 }
 
-static float get_bcc (unsigned char r, unsigned char g, unsigned char b)
+static double get_bcc (unsigned char r, unsigned char g, unsigned char b)
 {
-  return (r+g+b) == 0 ? 0 : (float)b/(float)(r+g+b);
+  return (r+g+b) == 0 ? 0 : (double)b/(double)(r+g+b);
 }
 
-static float get_H (unsigned char r, unsigned char g, unsigned char b)
+static double get_H (unsigned char r, unsigned char g, unsigned char b)
 {
-  double R = (int)r/255;
-  double G = (int)g/255;
-  double B = (int)b/255;
-
+  double R = (double)r/255;
+  double G = (double)g/255;
+  double B = (double)b/255;
   rgb RGB = {R, G, B};
   hsv HSV = rgb2hsv(RGB);
-  return HSV.h;
+  return HSV.h/360;
 }
 
-float get_metric (PGAMetricType type, unsigned char r, unsigned char g, unsigned char b)
+double get_metric (PGAMetricType type, unsigned char r, unsigned char g, unsigned char b)
 {
+  double ret;
   switch (type){
-  case Red: return get_rcc (r, g, b);
-  case Green: return get_gcc (r, g, b);
-  case Blue: return get_bcc (r, g, b);
-  case H: return get_H (r, g, b);
+  case Red: ret = get_rcc (r, g, b); break;
+  case Green: ret = get_gcc (r, g, b); break;
+  case Blue: ret = get_bcc (r, g, b); break;
+  case H: ret = get_H (r, g, b); break;
   case Undef:
-  default: return get_gcc (r, g, b);
+  default: ret = get_gcc (r, g, b); break;
   }
-  return 0;
+  }
+  return ret;
 }
 
 int is_black (unsigned char r, unsigned char g, unsigned char b)

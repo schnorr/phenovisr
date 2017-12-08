@@ -8,7 +8,7 @@ static int gcc_get_bin_for_pixel (PGAMetricType type, int grain, int i, image_t 
   g = iimage[i+1];
   b = iimage[i+2];
   if (is_black(r, g, b)) return -1;
-  float value = get_metric (type, r, g, b) * grain;
+  double value = get_metric (type, r, g, b) * grain;
   if (value >= grain) value = grain - 1;
   return floor(value);
 }

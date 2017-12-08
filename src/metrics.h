@@ -3,10 +3,10 @@
 #include "jpeg_image.h"
 #include "rgb2hsv.h"
 
-float get_metric (PGAMetricType type,
-		  unsigned char r,
-		  unsigned char g,
-		  unsigned char b);
+double get_metric (PGAMetricType type,
+		   unsigned char r,
+		   unsigned char g,
+		   unsigned char b);
 int is_black (unsigned char r,
 	      unsigned char g,
 	      unsigned char b);
