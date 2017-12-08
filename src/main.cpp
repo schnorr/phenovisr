@@ -98,3 +98,14 @@ DataFrame phenovis_get_histogram(int mtype, StringVector names, int number_of_bi
     return DataFrame();
   }
 }
+
+// [[Rcpp::export]]
+DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int nbins, int nsubins)
+{
+  PGAMetricType type = static_cast<PGAMetricType>(mtype);
+  if(type != H){
+    std::cout << "A type different of phenovis_H() is unsupported for " <<  __FUNCTION__ << std::endl;
+    return DataFrame();
+  }
+  //Forthcoming
+}

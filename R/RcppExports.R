@@ -25,3 +25,7 @@ phenovis_get_histogram <- function(mtype, names, number_of_bins) {
     .Call(`_phenovisr_phenovis_get_histogram`, mtype, names, number_of_bins)
 }
 
+phenovis_get_HSV_double_histogram <- function(mtype, images, nbins, nsubins) {
+    .Call(`_phenovisr_phenovis_get_HSV_double_histogram`, mtype, images, nbins, nsubins)
+}
+
