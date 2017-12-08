@@ -36,7 +36,6 @@ double get_metric (PGAMetricType type, unsigned char r, unsigned char g, unsigne
   case Undef:
   default: ret = get_gcc (r, g, b); break;
   }
-  }
   return ret;
 }
 
