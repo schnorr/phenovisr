@@ -1,6 +1,7 @@
 #ifndef __METRICS_H
 #define __METRICS_H
 #include "jpeg_image.h"
+#include "rgb2hsv.h"
 
 float get_metric (PGAMetricType type,
 		  unsigned char r,

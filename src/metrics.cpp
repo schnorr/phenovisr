@@ -17,7 +17,13 @@ static float get_blue_average (unsigned char r, unsigned char g, unsigned char b
 
 static float get_H_average (unsigned char r, unsigned char g, unsigned char b)
 {
-  return 0;
+  double R = (int)r/255;
+  double G = (int)g/255;
+  double B = (int)b/255;
+
+  rgb RGB = {R, G, B};
+  hsv HSV = rgb2hsv(RGB);
+  return HSV.h;
 }
 
 float get_metric (PGAMetricType type, unsigned char r, unsigned char g, unsigned char b)
