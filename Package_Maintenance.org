@@ -37,7 +37,8 @@ R CMD INSTALL .
 #+end_src
 
 #+RESULTS:
-: g++  -I/usr/share/R/include -DNDEBUG  -I"/home/schnorr/R/x86_64-pc-linux-gnu-library/3.4/Rcpp/include"    -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-3.4.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c metrics.cpp -o metrics.o
+: g++  -I/usr/share/R/include -DNDEBUG  -I"/home/schnorr/R/x86_64-pc-linux-gnu-library/3.4/Rcpp/include"    -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-3.4.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c RcppExports.cpp -o RcppExports.o
+: g++  -I/usr/share/R/include -DNDEBUG  -I"/home/schnorr/R/x86_64-pc-linux-gnu-library/3.4/Rcpp/include"    -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-3.4.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c main.cpp -o main.o
 : g++ -shared -L/usr/lib/R/lib -Wl,-z,relro -o phenovisr.so RcppExports.o gcc.o jpeg_image.o main.o metrics.o rgb2hsv.o -ljpeg -L/usr/lib/R/lib -lR
 
 
