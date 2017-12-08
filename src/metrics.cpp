@@ -1,16 +1,16 @@
 #include "metrics.h"
 
-static float get_red_average (unsigned char r, unsigned char g, unsigned char b)
+static float get_rcc (unsigned char r, unsigned char g, unsigned char b)
 {
   return (r+g+b) == 0 ? 0 : (float)r/(float)(r+g+b);
 }
 
-static float get_green_average (unsigned char r, unsigned char g, unsigned char b)
+static float get_gcc (unsigned char r, unsigned char g, unsigned char b)
 {
   return (r+g+b) == 0 ? 0 : (float)g/(float)(r+g+b);
 }
 
-static float get_blue_average (unsigned char r, unsigned char g, unsigned char b)
+static float get_bcc (unsigned char r, unsigned char g, unsigned char b)
 {
   return (r+g+b) == 0 ? 0 : (float)b/(float)(r+g+b);
 }
@@ -29,12 +29,12 @@ static float get_H (unsigned char r, unsigned char g, unsigned char b)
 float get_metric (PGAMetricType type, unsigned char r, unsigned char g, unsigned char b)
 {
   switch (type){
-  case Red: return get_red_average (r, g, b);
-  case Green: return get_green_average (r, g, b);
-  case Blue: return get_blue_average (r, g, b);
+  case Red: return get_rcc (r, g, b);
+  case Green: return get_gcc (r, g, b);
+  case Blue: return get_bcc (r, g, b);
   case H: return get_H (r, g, b);
   case Undef:
-  default: return get_green_average (r, g, b);
+  default: return get_gcc (r, g, b);
   }
   return 0;
 }
