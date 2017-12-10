@@ -69,16 +69,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // phenovis_get_HSV_double_histogram
-DataFrame phenovis_get_HSV_double_histogram(int mtype, StringVector images, int nbins, int nsubins);
-RcppExport SEXP _phenovisr_phenovis_get_HSV_double_histogram(SEXP mtypeSEXP, SEXP imagesSEXP, SEXP nbinsSEXP, SEXP nsubinsSEXP) {
+DataFrame phenovis_get_HSV_double_histogram(int mtype, StringVector images, int nsubins);
+RcppExport SEXP _phenovisr_phenovis_get_HSV_double_histogram(SEXP mtypeSEXP, SEXP imagesSEXP, SEXP nsubinsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type mtype(mtypeSEXP);
     Rcpp::traits::input_parameter< StringVector >::type images(imagesSEXP);
-    Rcpp::traits::input_parameter< int >::type nbins(nbinsSEXP);
     Rcpp::traits::input_parameter< int >::type nsubins(nsubinsSEXP);
-    rcpp_result_gen = Rcpp::wrap(phenovis_get_HSV_double_histogram(mtype, images, nbins, nsubins));
+    rcpp_result_gen = Rcpp::wrap(phenovis_get_HSV_double_histogram(mtype, images, nsubins));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -90,7 +89,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_phenovisr_phenovis_H", (DL_FUNC) &_phenovisr_phenovis_H, 0},
     {"_phenovisr_phenovis_read_mask", (DL_FUNC) &_phenovisr_phenovis_read_mask, 1},
     {"_phenovisr_phenovis_get_histogram", (DL_FUNC) &_phenovisr_phenovis_get_histogram, 3},
-    {"_phenovisr_phenovis_get_HSV_double_histogram", (DL_FUNC) &_phenovisr_phenovis_get_HSV_double_histogram, 4},
+    {"_phenovisr_phenovis_get_HSV_double_histogram", (DL_FUNC) &_phenovisr_phenovis_get_HSV_double_histogram, 3},
     {NULL, NULL, 0}
 };
 

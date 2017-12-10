@@ -7,5 +7,6 @@
 #include "metrics.h"
 
 int *get_histogram (PGAMetricType type, int grain, image_t *image);
+hsv_histogram_t *get_HSV_double_histogram (PGAMetricType type, image_t *image, int nbins, int nsubins);
 
 #endif

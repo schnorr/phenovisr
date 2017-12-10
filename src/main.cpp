@@ -100,12 +100,79 @@ DataFrame phenovis_get_histogram(int mtype, StringVector names, int number_of_bi
 }
 
 // [[Rcpp::export]]
-DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int nbins, int nsubins)
+DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int nsubins)
 {
+  //The number of bins for H is fixed
+  int nbins = 360;
+
   PGAMetricType type = static_cast<PGAMetricType>(mtype);
   if(type != H){
     std::cout << "A type different of phenovis_H() is unsupported for " <<  __FUNCTION__ << std::endl;
     return DataFrame();
   }
-  //Forthcoming
+
+  CharacterVector columnNames;
+  columnNames.push_back("Width");
+  columnNames.push_back("Height");
+  columnNames.push_back("Pixels");
+  columnNames.push_back("H");
+  columnNames.push_back("Count");
+  for (int j = 0; j < nsubins; j++){
+    columnNames.push_back("V" + std::to_string(j));
+  }
+
+  IntegerMatrix mat(images.size() * nbins, 5 + nsubins);
+
+  int i;
+  for (i = 0; i < images.size(); i++){
+
+    image_t *image = load_jpeg_image(std::string(images(i)).c_str());
+
+    int considered_pixels = image->width * image->height;
+    if (global_mask){
+      considered_pixels = apply_mask(image, global_mask);
+    }
+
+    hsv_histogram_t *histogram = get_HSV_double_histogram (type, image, nbins, nsubins);
+
+    for (int j = 0; j < nbins; j++){
+      IntegerVector row;
+      row.push_back(image->width);
+      row.push_back(image->height);
+      row.push_back(considered_pixels);
+      row.push_back(histogram[j].H);
+      row.push_back(histogram[j].count);
+      for (int k = 0; k < histogram[j].nsubins; k++){
+	if (histogram[j].V == NULL){
+	  row.push_back(0);
+	}else{
+	  row.push_back(histogram[j].V[k]);
+	}
+      }
+      mat.row(i * images.size() + j) = row;
+    }
+
+    //free the double histogram
+    for (int j = 0; j < nbins; j++){
+      free(histogram[j].V);
+    }
+    free(histogram);
+    free(image->image);
+    free(image);
+  }
+  //replicate image names nbins time
+  std::vector<std::string> base(images.begin(), images.end());
+  std::vector<std::string> names;
+  for (int j = 0; j < nbins; j++){
+    names.insert(names.end(), base.begin(), base.end());
+  }
+
+  DataFrame ret(mat);
+  ret.insert(ret.begin(), names);
+  columnNames.push_front("Name");
+  ret.attr("names") = columnNames;
+  Function asDF("as.data.frame");
+  return asDF(ret);
+
+
 }
