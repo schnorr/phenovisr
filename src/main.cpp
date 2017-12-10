@@ -128,17 +128,19 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
   int i;
   for (i = 0; i < images.size(); i++){
 
+    // Load image and apply mask
     image_t *image = load_jpeg_image(std::string(images(i)).c_str());
-
     int considered_pixels = image->width * image->height;
     if (global_mask){
       considered_pixels = apply_mask(image, global_mask);
     }
 
+    // Calculate the histogram
     hsv_histogram_t *HIST;
     HIST = get_HSV_double_histogram (type, image, nbins, nsubins);
 
     for (int j = 0; j < nbins; j++){
+      // Push back the image name (to align to this row)
       names.push_back(std::string(images(i)));
 
       IntegerVector row;
@@ -157,11 +159,13 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
       mat.row(i * images.size() + j) = row;
     }
 
-    //free the double histogram
+    // Free the double HIST
     for (int j = 0; j < nbins; j++){
       free(HIST[j].V);
     }
     free(HIST);
+
+    // Free the image data
     free(image->image);
     free(image);
   }
@@ -173,6 +177,4 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
   ret.attr("names") = columnNames;
   Function asDF("as.data.frame");
   return asDF(ret);
-
-
 }
