@@ -126,6 +126,7 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
   std::vector<std::string> names;
 
   int i;
+  int row_number = 0;
   for (i = 0; i < images.size(); i++){
 
     // Load image and apply mask
@@ -156,7 +157,8 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
 	  row.push_back(HIST[j].V[k]);
 	}
       }
-      mat.row(i * images.size() + j) = row;
+      mat.row(row_number) = row;
+      row_number++;
     }
 
     // Free the double HIST
