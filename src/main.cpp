@@ -133,20 +133,21 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
       considered_pixels = apply_mask(image, global_mask);
     }
 
-    hsv_histogram_t *histogram = get_HSV_double_histogram (type, image, nbins, nsubins);
+    hsv_histogram_t *HIST;
+    HIST = get_HSV_double_histogram (type, image, nbins, nsubins);
 
     for (int j = 0; j < nbins; j++){
       IntegerVector row;
       row.push_back(image->width);
       row.push_back(image->height);
       row.push_back(considered_pixels);
-      row.push_back(histogram[j].H);
-      row.push_back(histogram[j].count);
-      for (int k = 0; k < histogram[j].nsubins; k++){
-	if (histogram[j].V == NULL){
+      row.push_back(HIST[j].H);
+      row.push_back(HIST[j].count);
+      for (int k = 0; k < HIST[j].nsubins; k++){
+	if (HIST[j].V == NULL){
 	  row.push_back(0);
 	}else{
-	  row.push_back(histogram[j].V[k]);
+	  row.push_back(HIST[j].V[k]);
 	}
       }
       mat.row(i * images.size() + j) = row;
@@ -154,9 +155,9 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
 
     //free the double histogram
     for (int j = 0; j < nbins; j++){
-      free(histogram[j].V);
+      free(HIST[j].V);
     }
-    free(histogram);
+    free(HIST);
     free(image->image);
     free(image);
   }
