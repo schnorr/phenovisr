@@ -122,6 +122,8 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
   }
 
   IntegerMatrix mat(images.size() * nbins, 5 + nsubins);
+  // names is a vector to keep image names
+  std::vector<std::string> names;
 
   int i;
   for (i = 0; i < images.size(); i++){
@@ -137,6 +139,8 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
     HIST = get_HSV_double_histogram (type, image, nbins, nsubins);
 
     for (int j = 0; j < nbins; j++){
+      names.push_back(std::string(images(i)));
+
       IntegerVector row;
       row.push_back(image->width);
       row.push_back(image->height);
@@ -161,13 +165,8 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
     free(image->image);
     free(image);
   }
-  //replicate image names nbins time
-  std::vector<std::string> base(images.begin(), images.end());
-  std::vector<std::string> names;
-  for (int j = 0; j < nbins; j++){
-    names.insert(names.end(), base.begin(), base.end());
-  }
 
+  // Create the resulting data frame
   DataFrame ret(mat);
   ret.insert(ret.begin(), names);
   columnNames.push_front("Name");
