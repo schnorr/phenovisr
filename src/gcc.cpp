@@ -31,6 +31,10 @@ static hsv get_HSV_for_pixel (int pixel, image_t *image)
   r = iimage[pixel+0];
   g = iimage[pixel+1];
   b = iimage[pixel+2];
+  if (is_black(r, g, b)){
+    // If pixel is black, return white HSV
+    return {0,0,0};
+  }
 
   double R = (double)r/255;
   double G = (double)g/255;
