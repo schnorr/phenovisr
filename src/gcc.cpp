@@ -37,12 +37,6 @@ static hsv get_HSV_for_pixel (int pixel, image_t *image)
   double B = (double)b/255;
   rgb RGB = {R, G, B};
   hsv HSV = rgb2hsv(RGB);
-
-  static int z = 100;
-  if (z > 0 && HSV.h != 0){
-    z--;
-//    std::cout << HSV.h << " " << floor(HSV.h) << " " << HSV.s << " " << HSV.v << std::endl;
-  }
   return HSV;
 }
 
