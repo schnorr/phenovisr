@@ -2,6 +2,7 @@
 #include <jpeglib.h>
 #include <sys/time.h>
 #include <math.h>
+#include <string>
 #include "jpeg_image.h"
 #include "metrics.h"
 #include "gcc.h"

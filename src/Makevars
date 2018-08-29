@@ -1,2 +1,2 @@
-PKG_CPPFLAGS =
+PKG_CPPFLAGS = -std=c++0x
 PKG_LIBS = -ljpeg
