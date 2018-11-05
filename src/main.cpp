@@ -152,11 +152,11 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
       row.push_back(HIST[j].H);
       row.push_back(HIST[j].count);
       for (int k = 0; k < HIST[j].nsubins; k++){
-	if (HIST[j].V == NULL){
-	  row.push_back(0);
-	}else{
-	  row.push_back(HIST[j].V[k]);
-	}
+        if (HIST[j].V == NULL) {
+          row.push_back(0);
+	      } else {
+	        row.push_back(HIST[j].V[k]);
+	      }
       }
       mat.row(row_number) = row;
       row_number++;
