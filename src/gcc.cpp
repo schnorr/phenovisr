@@ -90,8 +90,8 @@ HSV_Mean_Histogram* get_hsv_mean_histogram(image_t *image, int consideredPixels)
     double v = HSV.v;
 
     histogram[h].HCount = histogram[h].HCount + 1;
-    histogram[h].SMean = histogram[h].SMean + HSV.s;
-    histogram[h].VMean = histogram[h].VMean + HSV.v;
+    histogram[h].SMean = histogram[h].SMean + s;
+    histogram[h].VMean = histogram[h].VMean + v;
   }
 
   // Calculate SMean and VMean

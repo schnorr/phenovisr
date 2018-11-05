@@ -138,7 +138,7 @@ DataFrame phenovis_get_HSV_mean_histogram (StringVector images) {
       // Push back the image name
       names.push_back(std::string(images(i)));
 
-      IntegerVector row;
+      NumericVector row;
       row.push_back(image->width);
       row.push_back(image->height);
       row.push_back(consideredPixels);
