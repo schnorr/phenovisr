@@ -10,6 +10,13 @@ typedef struct hsv_histogram {
   int *V;      // A vector of nsubins with the counts of V
 }hsv_histogram_t;
 
+typedef struct HSV_Mean_Histogram {
+  int H;      // The H coordinate
+  int HCount; // The numper of pixels in the respective H bin
+  double SMean;  // The mean value of S in these pixels
+  double VMean;  // The mean value of V in these pixels
+} HSV_Mean_Histogram_t;
+
 double get_metric (PGAMetricType type,
 		   unsigned char r,
 		   unsigned char g,

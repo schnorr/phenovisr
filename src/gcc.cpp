@@ -69,3 +69,36 @@ hsv_histogram_t *get_HSV_double_histogram (PGAMetricType type, image_t *image, i
   }
   return ret;
 }
+
+HSV_Mean_Histogram* get_hsv_mean_histogram(image_t *image, int consideredPixels) {
+  size_t histogramSize = 360 * sizeof(HSV_Mean_Histogram_t);
+  HSV_Mean_Histogram_t *histogram = (HSV_Mean_Histogram_t*) malloc(histogramSize);
+
+  // Initialize the histograms array
+  for (int i=0; i < 360; i++) {
+    histogram[i].H = i;
+    histogram[i].HCount = 0;
+    histogram[i].VMean = 0;
+    histogram[i].SMean = 0;
+  }
+
+  // For every pixel...
+  for (int i = 0; i < image -> size; i = i+3) {
+    hsv HSV = get_HSV_for_pixel(i, image);
+    int h = floor(HSV.h);
+    double s = HSV.s;
+    double v = HSV.v;
+
+    histogram[h].HCount = histogram[h].HCount + 1;
+    histogram[h].SMean = histogram[h].SMean + HSV.s;
+    histogram[h].VMean = histogram[h].VMean + HSV.v;
+  }
+
+  // Calculate SMean and VMean
+  for (int i=0; i < 360; i++) {
+    histogram[i].VMean = histogram[i].VMean / histogram[i].HCount;
+    histogram[i].SMean = histogram[i].SMean / histogram[i].HCount;
+  }
+
+  return histogram;
+}

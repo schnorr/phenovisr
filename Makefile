@@ -1,2 +1,2 @@
 clean:
-	rm src/*.o src/*.so
+	rm -rf src/*.o src/*.so ..Rcheck
