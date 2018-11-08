@@ -114,7 +114,7 @@ DataFrame phenovis_get_HSV_mean_histogram (StringVector images) {
   columnNames.push_back("SMean");
   columnNames.push_back("VMean");
   
-  IntegerMatrix matrix(images.size() * nbins, 7);
+  NumericMatrix matrix(images.size() * nbins, 7);
 
   // names is a vector to keep the image names
   std::vector<std::string> names;
