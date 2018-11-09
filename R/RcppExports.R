@@ -29,6 +29,10 @@ phenovis_get_HSV_mean_histogram <- function(images) {
     .Call(`_phenovisr_phenovis_get_HSV_mean_histogram`, images)
 }
 
+phenovis_get_HSV_mode_histogram <- function(images) {
+    .Call(`_phenovisr_phenovis_get_HSV_mode_histogram`, images)
+}
+
 phenovis_get_HSV_double_histogram <- function(mtype, images, nsubins) {
     .Call(`_phenovisr_phenovis_get_HSV_double_histogram`, mtype, images, nsubins)
 }

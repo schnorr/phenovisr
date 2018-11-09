@@ -17,6 +17,15 @@ typedef struct HSV_Mean_Histogram {
   double VMean;  // The mean value of V in these pixels
 } HSV_Mean_Histogram_t;
 
+typedef struct HSV_Mode_Histogram {
+  int H; // The H coordinate
+  int HCount; // The mumber of pixels in the respective H bin
+  int SHistogram[10]; // The distribution of S observations
+  int VHistogram[10]; // The distribution of V observations
+  double SMode; // The mode of the S observations in these pixels
+  double VMode; // The mode of the V observations in these pixels
+} HSV_Mode_Histogram_t;
+
 double get_metric (PGAMetricType type,
 		   unsigned char r,
 		   unsigned char g,

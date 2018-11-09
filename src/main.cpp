@@ -166,6 +166,73 @@ DataFrame phenovis_get_HSV_mean_histogram (StringVector images) {
 }
 
 // [[Rcpp::export]]
+DataFrame phenovis_get_HSV_mode_histogram(StringVector images)
+{
+  // The bins represent each H value, so the number is is fixed in 360.
+  int nbins = 360;
+
+  CharacterVector columnNames;
+  columnNames.push_back("Width");
+  columnNames.push_back("Height");
+  columnNames.push_back("UnmaskedPixels");
+  columnNames.push_back("H");
+  columnNames.push_back("HCount");
+  columnNames.push_back("SMode");
+  columnNames.push_back("VMode");
+
+  NumericMatrix matrix(images.size() * nbins, 7);
+
+  // names is a vector to keep the image names
+  std::vector<std::string> names;
+
+  int i;
+  int row_number = 0;
+  for (i = 0; i < images.size(); i++)
+  {
+    // Load image and apply mask
+    image_t *image = load_jpeg_image(std::string(images(i)).c_str());
+    int consideredPixels = image->width * image->height;
+    if (global_mask) {
+      consideredPixels = apply_mask(image, global_mask);
+    }
+
+    // Calculate the histogram
+    HSV_Mode_Histogram_t *modeHistogram;
+    modeHistogram = get_hsv_mode_histogram(image, consideredPixels);
+
+    // Put histogram data in the created matrix
+    for (int j = 0; j < nbins; j++) {
+      // Push back the image name
+      names.push_back(std::string(images(i)));
+
+      NumericVector row;
+      row.push_back(image->width);
+      row.push_back(image->height);
+      row.push_back(consideredPixels);
+      row.push_back(modeHistogram[j].H);
+      row.push_back(modeHistogram[j].HCount);
+      row.push_back(modeHistogram[j].SMode);
+      row.push_back(modeHistogram[j].VMode);
+      matrix.row(row_number) = row;
+      row_number++;
+    }
+
+    // Memory cleanup
+    free(modeHistogram);
+    free(image->image);
+    free(image);
+  }
+
+  // Create the resulting data frame
+  DataFrame dataFrame(matrix);
+  dataFrame.insert(dataFrame.begin(), names);
+  columnNames.push_front("Name");
+  dataFrame.attr("names") = columnNames;
+  Function asDF("as.data.frame");
+  return asDF(dataFrame);
+}
+
+// [[Rcpp::export]]
 DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int nsubins)
 {
   //The number of bins for H is fixed

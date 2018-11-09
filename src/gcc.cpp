@@ -102,3 +102,47 @@ HSV_Mean_Histogram* get_hsv_mean_histogram(image_t *image, int consideredPixels)
 
   return histogram;
 }
+
+HSV_Mode_Histogram_t *get_hsv_mode_histogram(image_t *image, int consideredPixels) {
+  size_t histogramSize = 360 * sizeof(HSV_Mode_Histogram_t);
+  HSV_Mode_Histogram_t *histogram = (HSV_Mode_Histogram_t *)malloc(histogramSize);
+
+  // Initialize the histograms array
+  for (int i = 0; i < 360; i++) {
+    histogram[i].H = i;
+    histogram[i].HCount = 0;
+    for (int j = 0; j < 10; j++) {
+      histogram[i].SHistogram[j] = 0;
+      histogram[i].VHistogram[j] = 0;
+    }
+    histogram[i].SMode = 0;
+    histogram[i].VMode = 0;
+  }
+
+  // For every pixel...
+  for (int i = 0; i < image->size; i = i + 3) {
+    hsv HSV = get_HSV_for_pixel(i, image);
+    int h = floor(HSV.h);
+    int s = floor(HSV.s * 10);
+    int v = floor(HSV.v * 10);
+
+    histogram[h].HCount++;
+    histogram[h].SHistogram[s]++;
+    histogram[h].VHistogram[v]++;
+  }
+
+  // Calculate SMode and VMode
+  for (int i = 0; i < 360; i++) {
+    int SMaxBin = 0;
+    int VMaxBin = 0;
+    for(int j = 1; j < 10; j++) {
+      SMaxBin = (histogram[i].SHistogram[j] >= histogram[i].SHistogram[SMaxBin]) ? j : SMaxBin;
+      VMaxBin = (histogram[i].VHistogram[j] >= histogram[i].VHistogram[VMaxBin]) ? j : VMaxBin;
+    }
+
+    histogram[i].SMode = ((double)SMaxBin + 1) / 10;
+    histogram[i].VMode = ((double)VMaxBin + 1) / 10;
+  }
+
+  return histogram;
+}
