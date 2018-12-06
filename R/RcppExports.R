@@ -37,3 +37,7 @@ phenovis_get_HSV_double_histogram <- function(mtype, images, nsubins) {
     .Call(`_phenovisr_phenovis_get_HSV_double_histogram`, mtype, images, nsubins)
 }
 
+phenovis_get_mean_gcc <- function(images) {
+    .Call(`_phenovisr_phenovis_get_mean_gcc`, images)
+}
+

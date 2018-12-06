@@ -313,3 +313,53 @@ DataFrame phenovis_get_HSV_double_histogram (int mtype, StringVector images, int
   Function asDF("as.data.frame");
   return asDF(ret);
 }
+
+// [[Rcpp::export]]
+DataFrame phenovis_get_mean_gcc(StringVector images) {
+  CharacterVector columnNames;
+  columnNames.push_back("Width");
+  columnNames.push_back("Height");
+  columnNames.push_back("Unmasked_Pixels");
+  columnNames.push_back("Mean_Gcc");
+
+  NumericMatrix matrix(images.size(), 4);
+
+  // names is a vector to keep image names
+  std::vector<std::string> names;
+
+  int i, row_number = 0;
+  for (i = 0; i < images.size(); i++) {
+    // Load the image and apply mask
+    image_t *image = load_jpeg_image(std::string(images(i)).c_str());
+    int considered_pixels = image->width * image->height;
+    if (global_mask) {
+      considered_pixels = apply_mask(image, global_mask);
+    }
+
+    // Calculate the mean GCC
+    double mean_gcc = get_mean_gcc_for_image(image);
+
+    // Push back the image name (to aligh to this row)
+    names.push_back(std::string(images(i)));
+    NumericVector row;
+    row.push_back(image->width);
+    row.push_back(image->height);
+    row.push_back(considered_pixels);
+    row.push_back(mean_gcc);
+
+    matrix.row(row_number) = row;
+    row_number++;
+
+    //Free the image data
+    free(image->image);
+    free(image);
+  }
+
+  // Create the resulting data frame
+  DataFrame ret(matrix);
+  ret.insert(ret.begin(), names);
+  columnNames.push_front("Name");
+  ret.attr("names") = columnNames;
+  Function asDF("as.data.frame");
+  return asDF(ret);
+}

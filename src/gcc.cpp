@@ -24,8 +24,7 @@ int *get_histogram (PGAMetricType type, int grain, image_t *image)
   return ret;
 }
 
-static hsv get_HSV_for_pixel (int pixel, image_t *image)
-{
+static hsv get_HSV_for_pixel (int pixel, image_t *image) {
   unsigned char *iimage = image->image;
   unsigned char r, g, b;
   r = iimage[pixel+0];
@@ -42,6 +41,16 @@ static hsv get_HSV_for_pixel (int pixel, image_t *image)
   rgb RGB = {R, G, B};
   hsv HSV = rgb2hsv(RGB);
   return HSV;
+}
+
+static rgb get_rgb_for_pixel (int pixel, image_t *image) {
+  unsigned char *iimage = image->image;
+  unsigned char r = iimage[pixel];
+  unsigned char g = iimage[pixel+1];
+  unsigned char b = iimage[pixel+2];
+
+  rgb RGB = { (double)r/255, (double)g/255, (double)b/255 };
+  return RGB;
 }
 
 hsv_histogram_t *get_HSV_double_histogram (PGAMetricType type, image_t *image, int nbins, int nsubins)
@@ -145,4 +154,18 @@ HSV_Mode_Histogram_t *get_hsv_mode_histogram(image_t *image, int consideredPixel
   }
 
   return histogram;
+}
+
+double get_mean_gcc_for_image(image_t *image) {
+  double gcc_sum = 0;
+  int consideredPixels = 0;
+  // For every pixel...
+  for(int i = 0; i < image->size; i += 3) {
+    rgb RGB = get_rgb_for_pixel(i, image);
+    if(!(RGB.r == 0 && RGB.g == 0 && RGB.b == 0)) {
+      gcc_sum += RGB.g / (RGB.r + RGB.g + RGB.b);
+      consideredPixels++;
+    }
+  }
+  return gcc_sum/consideredPixels;
 }
