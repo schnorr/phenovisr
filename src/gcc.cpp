@@ -53,6 +53,39 @@ static rgb get_rgb_for_pixel (int pixel, image_t *image) {
   return RGB;
 }
 
+gcc_histogram_t *get_gcc_color_histogram(int numberOfBins, image_t *image) {
+  gcc_histogram_t *histogram = (gcc_histogram_t*)malloc(sizeof(gcc_histogram_t));
+  histogram->gcc = (int*) malloc(sizeof(int) * numberOfBins);
+  histogram->color_histogram = (rgb*) malloc(sizeof(rgb) * numberOfBins);
+  for(int i=0; i<numberOfBins; i++) {
+    histogram->gcc[i] = 0;
+    histogram->color_histogram[i] = { (double)0, (double)0, (double)0 };
+  }
+
+  for(int i=0; i < image->size; i = i+3) {
+    PGAMetricType metricType = Green;
+    int bin = gcc_get_bin_for_pixel(metricType, numberOfBins, i, image);
+    histogram->gcc[bin]++;
+    unsigned char r = image->image[i];
+    unsigned char g = image->image[i+1];
+    unsigned char b = image->image[i+2];
+    double newR = histogram->color_histogram[bin].r + ((double)r/255);
+    double newG = histogram->color_histogram[bin].g + ((double)g/255);
+    double newB = histogram->color_histogram[bin].b + ((double)b/255);
+    histogram->color_histogram[bin] = { newR, newG, newB };
+  }
+
+  for(int i=0; i < numberOfBins; i++) {
+    double meanR = (double) histogram->color_histogram[i].r / histogram->gcc[i];
+    double meanG = (double) histogram->color_histogram[i].g / histogram->gcc[i];
+    double meanB = (double) histogram->color_histogram[i].b / histogram->gcc[i];
+    
+    histogram->color_histogram[i] = { meanR, meanG, meanB };
+  }
+
+  return histogram;
+}
+
 hsv_histogram_t *get_HSV_double_histogram (PGAMetricType type, image_t *image, int nbins, int nsubins)
 {
   size_t size = nbins * sizeof(hsv_histogram_t);

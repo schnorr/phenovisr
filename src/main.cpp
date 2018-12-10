@@ -101,6 +101,62 @@ DataFrame phenovis_get_histogram(int mtype, StringVector names, int number_of_bi
 }
 
 // [[Rcpp::export]]
+DataFrame phenovis_get_gcc_color_histogram(StringVector names, int numberOfBins) {
+  
+  CharacterVector columnNames;
+  columnNames.push_back("Width");
+  columnNames.push_back("Height");
+  columnNames.push_back("Pixels");
+  columnNames.push_back("GCC_bin");
+  columnNames.push_back("Bin_value");
+  columnNames.push_back("Bin_color_r");
+  columnNames.push_back("Bin_color_g");
+  columnNames.push_back("Bin_color_b");
+
+  NumericMatrix mat(names.size() * numberOfBins, 8);
+
+  int i;
+  for (i = 0; i < names.size(); i++) {
+    // For every image...
+    image_t *image = load_jpeg_image(std::string(names(i)).c_str());
+    int considered_pixels = image->width * image->height;
+    if (global_mask) {
+      considered_pixels = apply_mask(image, global_mask);
+    }
+
+    NumericVector row;
+    gcc_histogram_t *histogram = get_gcc_color_histogram(numberOfBins, image);
+    for(int j = 0; j < numberOfBins; j++) {
+      // For every histogram bin
+      row.push_back(image->width);
+      row.push_back(image->height);
+      row.push_back(considered_pixels);
+      row.push_back(j);
+      row.push_back(histogram->gcc[j]);
+      row.push_back(histogram->color_histogram[j].r);
+      row.push_back(histogram->color_histogram[j].g);
+      row.push_back(histogram->color_histogram[j].b);
+
+      // Add row to the final data frame
+      mat.row(i * numberOfBins + j) = row;
+    }
+    
+    free(histogram->gcc);
+    free(histogram->color_histogram);
+    free(histogram);
+
+    free(image->image);
+    free(image);
+  }
+  DataFrame ret(mat);
+  ret.insert(ret.begin(), names);
+  columnNames.push_front("Name");
+  ret.attr("names") = columnNames;
+  Function asDF("as.data.frame");
+  return asDF(ret);
+}
+
+// [[Rcpp::export]]
 DataFrame phenovis_get_HSV_mean_histogram (StringVector images) {
   // The bins represent each H value, so the number is is fixed in 360.
   int nbins = 360;

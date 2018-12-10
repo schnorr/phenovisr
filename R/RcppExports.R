@@ -25,6 +25,10 @@ phenovis_get_histogram <- function(mtype, names, number_of_bins) {
     .Call(`_phenovisr_phenovis_get_histogram`, mtype, names, number_of_bins)
 }
 
+phenovis_get_gcc_color_histogram <- function(names, numberOfBins) {
+    .Call(`_phenovisr_phenovis_get_gcc_color_histogram`, names, numberOfBins)
+}
+
 phenovis_get_HSV_mean_histogram <- function(images) {
     .Call(`_phenovisr_phenovis_get_HSV_mean_histogram`, images)
 }

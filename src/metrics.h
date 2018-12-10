@@ -3,6 +3,11 @@
 #include "jpeg_image.h"
 #include "rgb2hsv.h"
 
+typedef struct gcc_histogram {
+  int *gcc;
+  rgb *color_histogram;
+} gcc_histogram_t;
+
 typedef struct hsv_histogram {
   int H;       // The H coordinate
   int count;   // The count of the given H
