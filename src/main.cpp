@@ -102,7 +102,6 @@ DataFrame phenovis_get_histogram(int mtype, StringVector names, int number_of_bi
 
 // [[Rcpp::export]]
 DataFrame phenovis_get_gcc_color_histogram(StringVector names, int numberOfBins) {
-  
   CharacterVector columnNames;
   columnNames.push_back("Width");
   columnNames.push_back("Height");
@@ -124,9 +123,9 @@ DataFrame phenovis_get_gcc_color_histogram(StringVector names, int numberOfBins)
       considered_pixels = apply_mask(image, global_mask);
     }
 
-    NumericVector row;
     gcc_histogram_t *histogram = get_gcc_color_histogram(numberOfBins, image);
     for(int j = 0; j < numberOfBins; j++) {
+      NumericVector row;
       // For every histogram bin
       row.push_back(image->width);
       row.push_back(image->height);

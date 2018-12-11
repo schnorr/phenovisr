@@ -65,14 +65,22 @@ gcc_histogram_t *get_gcc_color_histogram(int numberOfBins, image_t *image) {
   for(int i=0; i < image->size; i = i+3) {
     PGAMetricType metricType = Green;
     int bin = gcc_get_bin_for_pixel(metricType, numberOfBins, i, image);
-    histogram->gcc[bin]++;
-    unsigned char r = image->image[i];
-    unsigned char g = image->image[i+1];
-    unsigned char b = image->image[i+2];
-    double newR = histogram->color_histogram[bin].r + ((double)r/255);
-    double newG = histogram->color_histogram[bin].g + ((double)g/255);
-    double newB = histogram->color_histogram[bin].b + ((double)b/255);
-    histogram->color_histogram[bin] = { newR, newG, newB };
+    if (bin >= 0) {
+      histogram->gcc[bin]++;
+      unsigned char r = image->image[i];
+      unsigned char g = image->image[i + 1];
+      unsigned char b = image->image[i + 2];
+      // std::cout << "[" << bin << "] - Pixel color: (" << +r << "," << +g << "," << +b << ")" << std::endl;
+      double histR = histogram->color_histogram[bin].r;
+      double histG = histogram->color_histogram[bin].g;
+      double histB = histogram->color_histogram[bin].b;
+      // std::cout << "[" << bin << "] - Histogram sum: (" << histR << "," << histG << "," << histB << ")" << std::endl;
+      double newR = histR + ((double)r);
+      double newG = histG + ((double)g);
+      double newB = histB + ((double)b);
+      // std::cout << "[" << bin << "] - New hist sum: (" << newR << "," << newG << "," << newB << ")" << std::endl;
+      histogram->color_histogram[bin] = {newR, newG, newB};
+    }
   }
 
   for(int i=0; i < numberOfBins; i++) {
@@ -80,7 +88,7 @@ gcc_histogram_t *get_gcc_color_histogram(int numberOfBins, image_t *image) {
     double meanG = (double) histogram->color_histogram[i].g / histogram->gcc[i];
     double meanB = (double) histogram->color_histogram[i].b / histogram->gcc[i];
     
-    histogram->color_histogram[i] = { meanR, meanG, meanB };
+    histogram->color_histogram[i] = { meanR/255, meanG/255, meanB/255 };
   }
 
   return histogram;
