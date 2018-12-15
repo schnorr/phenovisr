@@ -135,9 +135,9 @@ DataFrame phenovis_get_gcc_color_histogram(StringVector names, int numberOfBins)
       row.push_back(histogram->color_histogram[j].r);
       row.push_back(histogram->color_histogram[j].g);
       row.push_back(histogram->color_histogram[j].b);
-
+      
       // Add row to the final data frame
-      mat.row(i * numberOfBins + j) = row;
+      mat.row((i * numberOfBins) + j) = row;
     }
     
     free(histogram->gcc);
@@ -148,7 +148,13 @@ DataFrame phenovis_get_gcc_color_histogram(StringVector names, int numberOfBins)
     free(image);
   }
   DataFrame ret(mat);
-  ret.insert(ret.begin(), names);
+  StringVector repeatedNames;
+  for(int i=0; i<names.size(); i++) {
+    for(int j=0; j<numberOfBins; j++) {
+      repeatedNames.push_back(names(i));
+    }
+  }
+  ret.insert(ret.begin(), repeatedNames);
   columnNames.push_front("Name");
   ret.attr("names") = columnNames;
   Function asDF("as.data.frame");
