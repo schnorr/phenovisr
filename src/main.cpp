@@ -103,19 +103,17 @@ DataFrame phenovis_get_histogram(int mtype, StringVector names, int number_of_bi
 // [[Rcpp::export]]
 DataFrame phenovis_get_gcc_color_histogram(StringVector names, int numberOfBins) {
   CharacterVector columnNames;
-  columnNames.push_back("Width");
-  columnNames.push_back("Height");
   columnNames.push_back("Pixels");
-  columnNames.push_back("GCC_bin");
-  columnNames.push_back("Bin_value");
-  columnNames.push_back("Bin_color_r");
-  columnNames.push_back("Bin_color_g");
-  columnNames.push_back("Bin_color_b");
+  for (int i = 0; i < numberOfBins; i++) {
+    columnNames.push_back("GCC_Hist_" + std::to_string(i));
+    columnNames.push_back("Hist_" + std::to_string(i) + "_r");
+    columnNames.push_back("Hist_" + std::to_string(i) + "_g");
+    columnNames.push_back("Hist_" + std::to_string(i) + "_b");
+  }
 
-  NumericMatrix mat(names.size() * numberOfBins, 8);
+  NumericMatrix mat(names.size(), (numberOfBins*4)+1);
 
-  int i;
-  for (i = 0; i < names.size(); i++) {
+  for (int i = 0; i < names.size(); i++) {
     // For every image...
     image_t *image = load_jpeg_image(std::string(names(i)).c_str());
     int considered_pixels = image->width * image->height;
@@ -123,22 +121,20 @@ DataFrame phenovis_get_gcc_color_histogram(StringVector names, int numberOfBins)
       considered_pixels = apply_mask(image, global_mask);
     }
 
+    NumericVector row;
+    row.push_back(considered_pixels);
     gcc_histogram_t *histogram = get_gcc_color_histogram(numberOfBins, image);
+
     for(int j = 0; j < numberOfBins; j++) {
-      NumericVector row;
       // For every histogram bin
-      row.push_back(image->width);
-      row.push_back(image->height);
-      row.push_back(considered_pixels);
-      row.push_back(j);
       row.push_back(histogram->gcc[j]);
       row.push_back(histogram->color_histogram[j].r);
       row.push_back(histogram->color_histogram[j].g);
       row.push_back(histogram->color_histogram[j].b);
       
       // Add row to the final data frame
-      mat.row((i * numberOfBins) + j) = row;
     }
+    mat.row(i) = row;
     
     free(histogram->gcc);
     free(histogram->color_histogram);
@@ -148,13 +144,7 @@ DataFrame phenovis_get_gcc_color_histogram(StringVector names, int numberOfBins)
     free(image);
   }
   DataFrame ret(mat);
-  StringVector repeatedNames;
-  for(int i=0; i<names.size(); i++) {
-    for(int j=0; j<numberOfBins; j++) {
-      repeatedNames.push_back(names(i));
-    }
-  }
-  ret.insert(ret.begin(), repeatedNames);
+  ret.insert(ret.begin(), names);
   columnNames.push_front("Name");
   ret.attr("names") = columnNames;
   Function asDF("as.data.frame");
