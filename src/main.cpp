@@ -6,6 +6,8 @@
 #include "jpeg_image.h"
 #include "metrics.h"
 #include "gcc.h"
+#include "rgb2hsv.h"
+#include "metrics_extraction.h"
 
 using namespace Rcpp;
 
@@ -420,6 +422,81 @@ DataFrame phenovis_get_mean_gcc(StringVector images) {
   DataFrame ret(matrix);
   ret.insert(ret.begin(), names);
   columnNames.push_front("Name");
+  ret.attr("names") = columnNames;
+  Function asDF("as.data.frame");
+  return asDF(ret);
+}
+
+// [[Rcpp::export]]
+DataFrame phenovis_get_metrics(StringVector images) {
+  CharacterVector columnNames;
+  columnNames.push_back("Considered_Pixels");
+  columnNames.push_back("Metric_Key");
+  columnNames.push_back("Metric_Value");
+  columnNames.push_back("Metric_Color_R");
+  columnNames.push_back("Metric_Color_G");
+  columnNames.push_back("Metric_Color_B");
+
+  int HSV_H_rows = images.size() * 360;
+
+  NumericMatrix matrix(HSV_H_rows, 6);
+
+  // names is a string vector to keep image names
+  std::vector<std::string> names;
+  std::vector<std::string> metricNames;
+
+  int i, row_number = 0;
+  for (i = 0; i < images.size(); i++) {
+    // Load the image and apply mask
+    image_t *image = load_jpeg_image(std::string(images(i)).c_str());
+    int considered_pixels = image->width * image->height;
+    if (global_mask) {
+      considered_pixels = apply_mask(image, global_mask);
+    }
+
+    // Calculate the HSV_H metric
+    phenology_metrics_t *phenology_metrics;
+    phenology_metrics = calculate_image_metrics(image);
+
+    // Push HSV_H metrics into the matrix
+    for(int j=0; j < 360; j++) {
+      // Push back the image and metric names
+      names.push_back(std::string(images(i)));
+      metricNames.push_back("HSV_H");
+      
+      NumericVector row;
+      row.push_back(considered_pixels);
+      row.push_back(j);
+      row.push_back(phenology_metrics->hsv_h[j]);
+
+      // Calculate the RGB and push it
+      rgb RGB = hsv2rgb({ (double)j, (double)1, (double)1 });
+      row.push_back(RGB.r);
+      row.push_back(RGB.g);
+      row.push_back(RGB.b);
+
+      matrix.row(row_number) = row;
+      row_number++;
+    }
+
+    // Free the calculated metrics
+    free(phenology_metrics->hsv_h);
+    free(phenology_metrics);
+
+    //Free the image data
+    free(image->image);
+    free(image);
+  }
+
+  // Create the resulting data frame
+  DataFrame ret(matrix);
+  
+  //Add names and metric names to the beginning
+  ret.insert(ret.begin(), metricNames);
+  columnNames.push_front("Metric_Name");
+  ret.insert(ret.begin(), names);
+  columnNames.push_front("Name");
+
   ret.attr("names") = columnNames;
   Function asDF("as.data.frame");
   return asDF(ret);

@@ -126,6 +126,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// phenovis_get_metrics
+DataFrame phenovis_get_metrics(StringVector images);
+RcppExport SEXP _phenovisr_phenovis_get_metrics(SEXP imagesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< StringVector >::type images(imagesSEXP);
+    rcpp_result_gen = Rcpp::wrap(phenovis_get_metrics(images));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_phenovisr_phenovis_red", (DL_FUNC) &_phenovisr_phenovis_red, 0},
@@ -139,6 +150,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_phenovisr_phenovis_get_HSV_mode_histogram", (DL_FUNC) &_phenovisr_phenovis_get_HSV_mode_histogram, 1},
     {"_phenovisr_phenovis_get_HSV_double_histogram", (DL_FUNC) &_phenovisr_phenovis_get_HSV_double_histogram, 3},
     {"_phenovisr_phenovis_get_mean_gcc", (DL_FUNC) &_phenovisr_phenovis_get_mean_gcc, 1},
+    {"_phenovisr_phenovis_get_metrics", (DL_FUNC) &_phenovisr_phenovis_get_metrics, 1},
     {NULL, NULL, 0}
 };
 
