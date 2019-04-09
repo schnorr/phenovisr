@@ -431,15 +431,14 @@ DataFrame phenovis_get_mean_gcc(StringVector images) {
 DataFrame phenovis_get_metrics(StringVector images) {
   CharacterVector columnNames;
   columnNames.push_back("Considered_Pixels");
-  columnNames.push_back("Metric_Key");
-  columnNames.push_back("Metric_Value");
-  columnNames.push_back("Metric_Color_R");
-  columnNames.push_back("Metric_Color_G");
-  columnNames.push_back("Metric_Color_B");
+  columnNames.push_back("HSV_Bin");
+  columnNames.push_back("HSV_H");
+  columnNames.push_back("HSV_SMean");
+  columnNames.push_back("HSV_VMean");
 
   int HSV_H_rows = images.size() * 360;
 
-  NumericMatrix matrix(HSV_H_rows, 6);
+  NumericMatrix matrix(HSV_H_rows, 5);
 
   // names is a string vector to keep image names
   std::vector<std::string> names;
@@ -468,12 +467,8 @@ DataFrame phenovis_get_metrics(StringVector images) {
       row.push_back(considered_pixels);
       row.push_back(j);
       row.push_back(phenology_metrics->hsv_h[j]);
-
-      // Calculate the RGB and push it
-      rgb RGB = hsv2rgb({ (double)j, (double)1, (double)1 });
-      row.push_back(RGB.r);
-      row.push_back(RGB.g);
-      row.push_back(RGB.b);
+      row.push_back(phenology_metrics->SMean[j]);
+      row.push_back(phenology_metrics->VMean[j]);
 
       matrix.row(row_number) = row;
       row_number++;
