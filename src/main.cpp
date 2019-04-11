@@ -435,10 +435,12 @@ DataFrame phenovis_get_metrics(StringVector images) {
   columnNames.push_back("HSV_H");
   columnNames.push_back("HSV_SMean");
   columnNames.push_back("HSV_VMean");
+  columnNames.push_back("HSV_SMode");
+  columnNames.push_back("HSV_VMode");
 
   int HSV_H_rows = images.size() * 360;
 
-  NumericMatrix matrix(HSV_H_rows, 5);
+  NumericMatrix matrix(HSV_H_rows, 7);
 
   // names is a string vector to keep image names
   std::vector<std::string> names;
@@ -469,6 +471,8 @@ DataFrame phenovis_get_metrics(StringVector images) {
       row.push_back(phenology_metrics->hsv_h[j]);
       row.push_back(phenology_metrics->SMean[j]);
       row.push_back(phenology_metrics->VMean[j]);
+      row.push_back(phenology_metrics->SMode[j]);
+      row.push_back(phenology_metrics->VMode[j]);
 
       matrix.row(row_number) = row;
       row_number++;
@@ -476,6 +480,10 @@ DataFrame phenovis_get_metrics(StringVector images) {
 
     // Free the calculated metrics
     free(phenology_metrics->hsv_h);
+    free(phenology_metrics->SMean);
+    free(phenology_metrics->VMean);
+    free(phenology_metrics->SMode);
+    free(phenology_metrics->VMode);
     free(phenology_metrics);
 
     //Free the image data

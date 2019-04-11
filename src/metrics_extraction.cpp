@@ -29,12 +29,22 @@ phenology_metrics_t *calculate_image_metrics(image_t *image) {
   metrics->hsv_h = (int *)malloc(sizeof(int) * 360);
   metrics->SMean = (double *)malloc(sizeof(double) * 360);
   metrics->VMean = (double *)malloc(sizeof(double) * 360);
+  metrics->SMode = (double *)malloc(sizeof(double) * 360);
+  metrics->VMode = (double *)malloc(sizeof(double) * 360);
+
+  // Allocate ephemeral metrics structs
+  double HSV_S_Subhistogram[360][10];
+  double HSV_V_Subhistogram[360][10];
 
   // Initialize metrics
   for (int i=0; i < 360; i++) {
     metrics->hsv_h[i] = 0;
     metrics->SMean[i] = 0;
     metrics->VMean[i] = 0;
+    for(int j=0; j<10; j++) {
+      HSV_S_Subhistogram[i][j] = 0;
+      HSV_V_Subhistogram[i][j] = 0;
+    }
   }
 
   // Calculate metrics (for each pixel...)
@@ -47,12 +57,25 @@ phenology_metrics_t *calculate_image_metrics(image_t *image) {
     double v = HSV.v;
     metrics->SMean[h] += s;
     metrics->VMean[h] += v;
+
+    int sIndex = floor(s * 10);
+    int vIndex = floor(v * 10);
+    HSV_S_Subhistogram[h][sIndex]++;
+    HSV_V_Subhistogram[h][vIndex]++;
   }
 
-  // Finish calculation of S and V mean
+  // Finish calculation of S and V mean/mode
   for(int i=0; i < 360; i++) {
     metrics->SMean[i] /= metrics->hsv_h[i];
     metrics->VMean[i] /= metrics->hsv_h[i];
+
+    int SMaxBin = 0, VMaxBin = 0;
+    for(int j = 0; j < 10; j++) {
+      SMaxBin = HSV_S_Subhistogram[i][j] >= HSV_S_Subhistogram[i][SMaxBin] ? j : SMaxBin;
+      VMaxBin = HSV_V_Subhistogram[i][j] >= HSV_V_Subhistogram[i][VMaxBin] ? j : VMaxBin;
+    }
+    metrics->SMode[i] = ((double)SMaxBin+1)/10;
+    metrics->VMode[i] = ((double)VMaxBin+1)/10;
   }
 
   return metrics;
