@@ -437,10 +437,15 @@ DataFrame phenovis_get_metrics(StringVector images) {
   columnNames.push_back("HSV_VMean");
   columnNames.push_back("HSV_SMode");
   columnNames.push_back("HSV_VMode");
+  columnNames.push_back("Gcc_Bin");
+  columnNames.push_back("Gcc_Value");
+  columnNames.push_back("Gcc_Mean_R");
+  columnNames.push_back("Gcc_Mean_G");
+  columnNames.push_back("Gcc_Mean_B");
 
   int HSV_H_rows = images.size() * 360;
 
-  NumericMatrix matrix(HSV_H_rows, 7);
+  NumericMatrix matrix(HSV_H_rows, 12);
 
   // names is a string vector to keep image names
   std::vector<std::string> names;
@@ -460,10 +465,10 @@ DataFrame phenovis_get_metrics(StringVector images) {
     phenology_metrics = calculate_image_metrics(image);
 
     // Push HSV_H metrics into the matrix
-    for(int j=0; j < 360; j++) {
+    for (int j=0; j < 360; j++) {
       // Push back the image and metric names
       names.push_back(std::string(images(i)));
-      metricNames.push_back("HSV_H");
+      metricNames.push_back("HSV");
       
       NumericVector row;
       row.push_back(considered_pixels);
@@ -474,8 +479,39 @@ DataFrame phenovis_get_metrics(StringVector images) {
       row.push_back(phenology_metrics->SMode[j]);
       row.push_back(phenology_metrics->VMode[j]);
 
+      // Empty values to fill in Gcc gap
+      // TODO Test if R will assume NA if I ommit these lines. If not, how can I push NA values?
+      row.push_back(-1);
+      row.push_back(-1);
+      row.push_back(-1);
+      row.push_back(-1);
+      row.push_back(-1);
+
       matrix.row(row_number) = row;
       row_number++;
+    }
+
+    // Push Gcc metrics into the matrix
+    for (int j=0; j<100; j++) {
+      // Push back the image and metric names
+      names.push_back(std::string(images(i)));
+      metricNames.push_back("Gcc");
+
+      NumericVector row;
+      // Empty stuff to fill in the HSV values
+      row.push_back(considered_pixels);
+      row.push_back(-1);
+      row.push_back(-1);
+      row.push_back(-1);
+      row.push_back(-1);
+      row.push_back(-1);
+      row.push_back(-1);
+
+      row.push_back(j);
+      row.push_back(phenology_metrics->Gcc[j]);
+      row.push_back(phenology_metrics->GccMeanColor[j].r);
+      row.push_back(phenology_metrics->GccMeanColor[j].g);
+      row.push_back(phenology_metrics->GccMeanColor[j].b);
     }
 
     // Free the calculated metrics
@@ -484,6 +520,8 @@ DataFrame phenovis_get_metrics(StringVector images) {
     free(phenology_metrics->VMean);
     free(phenology_metrics->SMode);
     free(phenology_metrics->VMode);
+    free(phenology_metrics->Gcc);
+    free(phenology_metrics->GccMeanColor);
     free(phenology_metrics);
 
     //Free the image data
@@ -496,7 +534,7 @@ DataFrame phenovis_get_metrics(StringVector images) {
   
   //Add names and metric names to the beginning
   ret.insert(ret.begin(), metricNames);
-  columnNames.push_front("Metric_Name");
+  columnNames.push_front("Metric_Type");
   ret.insert(ret.begin(), names);
   columnNames.push_front("Name");
 
