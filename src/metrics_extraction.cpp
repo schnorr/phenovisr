@@ -44,6 +44,7 @@ int get_gcc_bin_for_pixel(int pixel, image_t *image) {
     gccBin = -1;
   } else {
     gccBin = floor(get_gcc_value(r, g, b) * 100);
+    gccBin = (gccBin >= 100) ? 99 : gccBin;
   }
   return gccBin;
 }
@@ -102,11 +103,12 @@ phenology_metrics_t *calculate_image_metrics(image_t *image) {
     if (gccBin >= 0) {
       metrics->Gcc[gccBin]++;
       rgb RGB = get_rgb_for_pixel(i, image);
-      metrics->GccMeanColor[gccBin] = {
-        metrics->GccMeanColor[gccBin].r + RGB.r,
-        metrics->GccMeanColor[gccBin].g + RGB.g,
-        metrics->GccMeanColor[gccBin].b + RGB.b,
+      rgb newColor = {
+          metrics->GccMeanColor[gccBin].r + RGB.r,
+          metrics->GccMeanColor[gccBin].g + RGB.g,
+          metrics->GccMeanColor[gccBin].b + RGB.b,
       };
+      metrics->GccMeanColor[gccBin] = newColor;
     }
   }
 

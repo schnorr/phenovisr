@@ -443,9 +443,8 @@ DataFrame phenovis_get_metrics(StringVector images) {
   columnNames.push_back("Gcc_Mean_G");
   columnNames.push_back("Gcc_Mean_B");
 
-  int HSV_H_rows = images.size() * 360;
-
-  NumericMatrix matrix(HSV_H_rows, 12);
+  int rows = (images.size() * (360 + 100));
+  NumericMatrix matrix(rows, 12);
 
   // names is a string vector to keep image names
   std::vector<std::string> names;
@@ -469,7 +468,7 @@ DataFrame phenovis_get_metrics(StringVector images) {
       // Push back the image and metric names
       names.push_back(std::string(images(i)));
       metricNames.push_back("HSV");
-      
+
       NumericVector row;
       row.push_back(considered_pixels);
       row.push_back(j);
@@ -512,6 +511,9 @@ DataFrame phenovis_get_metrics(StringVector images) {
       row.push_back(phenology_metrics->GccMeanColor[j].r);
       row.push_back(phenology_metrics->GccMeanColor[j].g);
       row.push_back(phenology_metrics->GccMeanColor[j].b);
+
+      matrix.row(row_number) = row;
+      row_number++;
     }
 
     // Free the calculated metrics
