@@ -3,54 +3,19 @@
 
 #define MODE_SUBINS 10
 
-rgb get_rgb_for_pixel(int pixel, image_t *image) {
-  unsigned char *iimage = image->image;
-  unsigned char r = iimage[pixel];
-  unsigned char g = iimage[pixel + 1];
-  unsigned char b = iimage[pixel + 2];
-
-  rgb RGB = {(double)r / 255, (double)g / 255, (double)b / 255};
-  return RGB;
-}
-
-hsv get_HSV_for_pixel(int pixel, image_t *image) {
-  unsigned char *iimage = image->image;
-  unsigned char r, g, b;
-  r = iimage[pixel + 0];
-  g = iimage[pixel + 1];
-  b = iimage[pixel + 2];
-  if (!(r + g + b)) {
-    // If pixel is black, return white HSV
-    return {0, 0, 0};
+double get_mean_gcc_for_image(image_t *image)
+{
+  double gcc_sum = 0;
+  int consideredPixels = 0;
+  // For every pixel...
+  for (int i = 0; i < image->size; i += 3) {
+    rgb RGB = get_rgb_for_pixel(i, image);
+    if (!is_black(RGB)) {
+      gcc_sum += get_gcc_value(RGB);
+      consideredPixels++;
+    }
   }
-
-  double R = (double)r / 255;
-  double G = (double)g / 255;
-  double B = (double)b / 255;
-  rgb RGB = {R, G, B};
-  hsv HSV = rgb2hsv(RGB);
-  return HSV;
-}
-
-int get_gcc_bin_for_pixel(int pixel, image_t *image) {
-  unsigned char *iimage = image->image;
-  unsigned char r, g, b;
-  r = iimage[pixel + 0];
-  g = iimage[pixel + 1];
-  b = iimage[pixel + 2];
-  int gccBin;
-  if (!(r + g + b)) {
-  // If pixel is black
-    gccBin = -1;
-  } else {
-    gccBin = floor(get_gcc_value(r, g, b) * 100);
-    gccBin = (gccBin >= 100) ? 99 : gccBin;
-  }
-  return gccBin;
-}
-
-double get_gcc_value(unsigned char r, unsigned char g, unsigned char b) {
-  return (r + g + b) == 0 ? 0 : (double)g / (double)(r + g + b);
+  return gcc_sum / consideredPixels;
 }
 
 phenology_metrics_t *calculate_image_metrics(image_t *image) {

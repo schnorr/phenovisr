@@ -5,46 +5,6 @@
 
 using namespace Rcpp;
 
-// phenovis_red
-int phenovis_red();
-RcppExport SEXP _phenovisr_phenovis_red() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(phenovis_red());
-    return rcpp_result_gen;
-END_RCPP
-}
-// phenovis_green
-int phenovis_green();
-RcppExport SEXP _phenovisr_phenovis_green() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(phenovis_green());
-    return rcpp_result_gen;
-END_RCPP
-}
-// phenovis_blue
-int phenovis_blue();
-RcppExport SEXP _phenovisr_phenovis_blue() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(phenovis_blue());
-    return rcpp_result_gen;
-END_RCPP
-}
-// phenovis_H
-int phenovis_H();
-RcppExport SEXP _phenovisr_phenovis_H() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(phenovis_H());
-    return rcpp_result_gen;
-END_RCPP
-}
 // phenovis_read_mask
 void phenovis_read_mask(std::string maskname);
 RcppExport SEXP _phenovisr_phenovis_read_mask(SEXP masknameSEXP) {
@@ -53,66 +13,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type maskname(masknameSEXP);
     phenovis_read_mask(maskname);
     return R_NilValue;
-END_RCPP
-}
-// phenovis_get_histogram
-DataFrame phenovis_get_histogram(int mtype, StringVector names, int number_of_bins);
-RcppExport SEXP _phenovisr_phenovis_get_histogram(SEXP mtypeSEXP, SEXP namesSEXP, SEXP number_of_binsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type mtype(mtypeSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type names(namesSEXP);
-    Rcpp::traits::input_parameter< int >::type number_of_bins(number_of_binsSEXP);
-    rcpp_result_gen = Rcpp::wrap(phenovis_get_histogram(mtype, names, number_of_bins));
-    return rcpp_result_gen;
-END_RCPP
-}
-// phenovis_get_gcc_color_histogram
-DataFrame phenovis_get_gcc_color_histogram(StringVector names, int numberOfBins);
-RcppExport SEXP _phenovisr_phenovis_get_gcc_color_histogram(SEXP namesSEXP, SEXP numberOfBinsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< StringVector >::type names(namesSEXP);
-    Rcpp::traits::input_parameter< int >::type numberOfBins(numberOfBinsSEXP);
-    rcpp_result_gen = Rcpp::wrap(phenovis_get_gcc_color_histogram(names, numberOfBins));
-    return rcpp_result_gen;
-END_RCPP
-}
-// phenovis_get_HSV_mean_histogram
-DataFrame phenovis_get_HSV_mean_histogram(StringVector images);
-RcppExport SEXP _phenovisr_phenovis_get_HSV_mean_histogram(SEXP imagesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< StringVector >::type images(imagesSEXP);
-    rcpp_result_gen = Rcpp::wrap(phenovis_get_HSV_mean_histogram(images));
-    return rcpp_result_gen;
-END_RCPP
-}
-// phenovis_get_HSV_mode_histogram
-DataFrame phenovis_get_HSV_mode_histogram(StringVector images);
-RcppExport SEXP _phenovisr_phenovis_get_HSV_mode_histogram(SEXP imagesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< StringVector >::type images(imagesSEXP);
-    rcpp_result_gen = Rcpp::wrap(phenovis_get_HSV_mode_histogram(images));
-    return rcpp_result_gen;
-END_RCPP
-}
-// phenovis_get_HSV_double_histogram
-DataFrame phenovis_get_HSV_double_histogram(int mtype, StringVector images, int nsubins);
-RcppExport SEXP _phenovisr_phenovis_get_HSV_double_histogram(SEXP mtypeSEXP, SEXP imagesSEXP, SEXP nsubinsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type mtype(mtypeSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type images(imagesSEXP);
-    Rcpp::traits::input_parameter< int >::type nsubins(nsubinsSEXP);
-    rcpp_result_gen = Rcpp::wrap(phenovis_get_HSV_double_histogram(mtype, images, nsubins));
-    return rcpp_result_gen;
 END_RCPP
 }
 // phenovis_get_mean_gcc
@@ -139,16 +39,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_phenovisr_phenovis_red", (DL_FUNC) &_phenovisr_phenovis_red, 0},
-    {"_phenovisr_phenovis_green", (DL_FUNC) &_phenovisr_phenovis_green, 0},
-    {"_phenovisr_phenovis_blue", (DL_FUNC) &_phenovisr_phenovis_blue, 0},
-    {"_phenovisr_phenovis_H", (DL_FUNC) &_phenovisr_phenovis_H, 0},
     {"_phenovisr_phenovis_read_mask", (DL_FUNC) &_phenovisr_phenovis_read_mask, 1},
-    {"_phenovisr_phenovis_get_histogram", (DL_FUNC) &_phenovisr_phenovis_get_histogram, 3},
-    {"_phenovisr_phenovis_get_gcc_color_histogram", (DL_FUNC) &_phenovisr_phenovis_get_gcc_color_histogram, 2},
-    {"_phenovisr_phenovis_get_HSV_mean_histogram", (DL_FUNC) &_phenovisr_phenovis_get_HSV_mean_histogram, 1},
-    {"_phenovisr_phenovis_get_HSV_mode_histogram", (DL_FUNC) &_phenovisr_phenovis_get_HSV_mode_histogram, 1},
-    {"_phenovisr_phenovis_get_HSV_double_histogram", (DL_FUNC) &_phenovisr_phenovis_get_HSV_double_histogram, 3},
     {"_phenovisr_phenovis_get_mean_gcc", (DL_FUNC) &_phenovisr_phenovis_get_mean_gcc, 1},
     {"_phenovisr_phenovis_get_metrics", (DL_FUNC) &_phenovisr_phenovis_get_metrics, 1},
     {NULL, NULL, 0}

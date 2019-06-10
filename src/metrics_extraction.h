@@ -2,6 +2,7 @@
 #define __METRICS_EXTRACTION_H
 
 #include "jpeg_image.h"
+#include "metrics.h"
 #include "rgb2hsv.h"
 
 typedef struct phenology_metrics {
@@ -16,9 +17,6 @@ typedef struct phenology_metrics {
 } phenology_metrics_t;
 
 phenology_metrics_t *calculate_image_metrics(image_t *image);
-hsv get_HSV_for_pixel(int pixel, image_t *image);
-int get_gcc_bin_for_pixel(int pixel, image_t *image);
-double get_gcc_value(unsigned char r, unsigned char g, unsigned char b);
-rgb get_rgb_for_pixel(int pixel, image_t *image);
+double get_mean_gcc_for_image(image_t *image);
 
 #endif
