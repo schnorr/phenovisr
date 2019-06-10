@@ -16,9 +16,9 @@ rgb get_rgb_for_pixel(int pixel, image_t *image) {
 
 hsv get_HSV_for_pixel(int pixel, image_t *image) {
   rgb RGB = get_rgb_for_pixel(pixel, image);
-  if (is_black(RGB)) {
-    return {0, 0, 0};
-  }
+  // if (is_black(RGB)) {
+  //   return {-1, -1, -1};
+  // }
 
   hsv HSV = rgb2hsv(RGB);
   return HSV;

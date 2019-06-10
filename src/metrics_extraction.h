@@ -6,13 +6,14 @@
 #include "rgb2hsv.h"
 
 typedef struct phenology_metrics {
-  int *hsv_h;           // The histogram of the H component
-  double *SMean;        // The mean S value for each bin of H
-  double *VMean;        // The mean V value for each bin of H
-  double *SMode;        // The mode S value for each bin of H
-  double *VMode;        // The mode V value for each bin of H
+  int consideredPixels;  // The amount of pixels considered in the computation (a.k.a non black pixels)
+  int *hsv_h;             // The histogram of the H component
+  double *SMean;          // The mean S value for each bin of H
+  double *VMean;          // The mean V value for each bin of H
+  double *SMode;          // The mode S value for each bin of H
+  double *VMode;          // The mode V value for each bin of H
   
-  int *Gcc;             // The histogram for the Gcc
+  int *Gcc;               // The histogram for the Gcc
   rgb *GccMeanColor;      // The mean RGB colors for the Gcc histogram
 } phenology_metrics_t;
 

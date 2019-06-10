@@ -98,9 +98,8 @@ DataFrame phenovis_get_metrics(StringVector images) {
   for (i = 0; i < images.size(); i++) {
     // Load the image and apply mask
     image_t *image = load_jpeg_image(std::string(images(i)).c_str());
-    int considered_pixels = image->width * image->height;
     if (global_mask) {
-      considered_pixels = apply_mask(image, global_mask);
+      apply_mask(image, global_mask);
     }
 
     // Calculate the HSV_H metric
@@ -114,7 +113,7 @@ DataFrame phenovis_get_metrics(StringVector images) {
       metricNames.push_back("HSV");
 
       NumericVector row;
-      row.push_back(considered_pixels);
+      row.push_back(phenology_metrics->consideredPixels);
       row.push_back(j);
       row.push_back(phenology_metrics->hsv_h[j]);
       row.push_back(phenology_metrics->SMean[j]);
@@ -142,7 +141,7 @@ DataFrame phenovis_get_metrics(StringVector images) {
 
       NumericVector row;
       // Empty stuff to fill in the HSV values
-      row.push_back(considered_pixels);
+      row.push_back(phenology_metrics->consideredPixels);
       row.push_back(-1);
       row.push_back(-1);
       row.push_back(-1);

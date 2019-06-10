@@ -21,6 +21,7 @@ double get_mean_gcc_for_image(image_t *image)
 phenology_metrics_t *calculate_image_metrics(image_t *image) {
   // Allocate metrics struct
   phenology_metrics_t *metrics = (phenology_metrics_t*) malloc(sizeof(phenology_metrics_t));
+  metrics->consideredPixels = 0;
   metrics->hsv_h = (int *)malloc(sizeof(int) * 360);
   metrics->SMean = (double *)malloc(sizeof(double) * 360);
   metrics->VMean = (double *)malloc(sizeof(double) * 360);
@@ -50,30 +51,34 @@ phenology_metrics_t *calculate_image_metrics(image_t *image) {
 
   // Calculate metrics (for each pixel...)
   for(int i=0; i < image->size; i = i + 3) {
-    hsv HSV = get_HSV_for_pixel(i, image);
-    int h = floor(HSV.h);
-    metrics->hsv_h[h]++;
+    rgb RGB = get_rgb_for_pixel(i, image);
 
-    double s = HSV.s;
-    double v = HSV.v;
-    metrics->SMean[h] += s;
-    metrics->VMean[h] += v;
+    if(!is_black(RGB)) {
+      metrics->consideredPixels++;
 
-    int sIndex = floor(s * MODE_SUBINS);
-    int vIndex = floor(v * MODE_SUBINS);
-    HSV_S_Subhistogram[h][sIndex]++;
-    HSV_V_Subhistogram[h][vIndex]++;
+      // HSV Computations
+      hsv HSV = get_HSV_for_pixel(i, image);
+      int h = floor(HSV.h);
+      metrics->hsv_h[h]++;
+      metrics->SMean[h] += HSV.s;
+      metrics->VMean[h] += HSV.v;
 
-    int gccBin = get_gcc_bin_for_pixel(i, image);
-    if (gccBin >= 0) {
-      metrics->Gcc[gccBin]++;
-      rgb RGB = get_rgb_for_pixel(i, image);
-      rgb newColor = {
-          metrics->GccMeanColor[gccBin].r + RGB.r,
-          metrics->GccMeanColor[gccBin].g + RGB.g,
-          metrics->GccMeanColor[gccBin].b + RGB.b,
-      };
-      metrics->GccMeanColor[gccBin] = newColor;
+      int sIndex = floor(HSV.s * MODE_SUBINS);
+      int vIndex = floor(HSV.v * MODE_SUBINS);
+      HSV_S_Subhistogram[h][sIndex]++;
+      HSV_V_Subhistogram[h][vIndex]++;
+
+      // Gcc Computations
+      int gccBin = get_gcc_bin_for_pixel(i, image);
+      if (gccBin >= 0) {
+        metrics->Gcc[gccBin]++;
+        rgb newColor = {
+            metrics->GccMeanColor[gccBin].r + RGB.r,
+            metrics->GccMeanColor[gccBin].g + RGB.g,
+            metrics->GccMeanColor[gccBin].b + RGB.b,
+        };
+        metrics->GccMeanColor[gccBin] = newColor;
+      }
     }
   }
 
