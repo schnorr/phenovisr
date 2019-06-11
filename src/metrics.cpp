@@ -28,12 +28,14 @@ int get_gcc_bin_for_pixel(int pixel, image_t *image) {
   rgb RGB = get_rgb_for_pixel(pixel, image);
   int gccBin;
   if (is_black(RGB)) {
-    gccBin = -1;
+    // This is done to address division by zero. Since I need to consider
+    // black pixels, I will assume that for whatever value in which 
+    // R, G and B are the same (including a black pixel 0, 0, 0), the Gcc will
+    // be 1/3. The limit of x/3x when x approaches 0 is 1/3.
+    RGB = {1, 1, 1};
   }
-  else {
-    gccBin = floor(get_gcc_value(RGB) * 100);
-    gccBin = (gccBin >= 100) ? 99 : gccBin;
-  }
+  gccBin = floor(get_gcc_value(RGB) * 100);
+  gccBin = (gccBin >= 100) ? 99 : gccBin;
   return gccBin;
 }
 

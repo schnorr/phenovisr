@@ -1,6 +1,7 @@
 #ifndef __METRICS_EXTRACTION_H
 #define __METRICS_EXTRACTION_H
 
+#include <vector>
 #include "jpeg_image.h"
 #include "metrics.h"
 #include "rgb2hsv.h"
@@ -17,7 +18,7 @@ typedef struct phenology_metrics {
   rgb *GccMeanColor;      // The mean RGB colors for the Gcc histogram
 } phenology_metrics_t;
 
-phenology_metrics_t *calculate_image_metrics(image_t *image);
+phenology_metrics_t *calculate_image_metrics(image_t *image, std::vector<int> unmaskedPixels);
 double get_mean_gcc_for_image(image_t *image);
 
 #endif

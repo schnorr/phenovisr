@@ -18,7 +18,7 @@ double get_mean_gcc_for_image(image_t *image)
   return gcc_sum / consideredPixels;
 }
 
-phenology_metrics_t *calculate_image_metrics(image_t *image) {
+phenology_metrics_t *calculate_image_metrics(image_t *image, std::vector<int> unmaskedPixels) {
   // Allocate metrics struct
   phenology_metrics_t *metrics = (phenology_metrics_t*) malloc(sizeof(phenology_metrics_t));
   metrics->consideredPixels = 0;
@@ -49,37 +49,34 @@ phenology_metrics_t *calculate_image_metrics(image_t *image) {
     metrics->GccMeanColor[i] = { (double)0, (double)0, (double)0 };
   }
 
-  // Calculate metrics (for each pixel...)
-  for(int i=0; i < image->size; i = i + 3) {
-    rgb RGB = get_rgb_for_pixel(i, image);
+  // Calculate metrics (for each unmasked pixel...)
+  for(int i=0; i < unmaskedPixels.size(); i++) {
+    int pixelIndex = unmaskedPixels[i];
+    rgb RGB = get_rgb_for_pixel(pixelIndex, image);
 
-    if(!is_black(RGB)) {
-      metrics->consideredPixels++;
+    metrics->consideredPixels++;
 
-      // HSV Computations
-      hsv HSV = get_HSV_for_pixel(i, image);
-      int h = floor(HSV.h);
-      metrics->hsv_h[h]++;
-      metrics->SMean[h] += HSV.s;
-      metrics->VMean[h] += HSV.v;
+    // HSV Computations
+    hsv HSV = get_HSV_for_pixel(pixelIndex, image);
+    int h = floor(HSV.h);
+    metrics->hsv_h[h]++;
+    metrics->SMean[h] += HSV.s;
+    metrics->VMean[h] += HSV.v;
 
-      int sIndex = floor(HSV.s * MODE_SUBINS);
-      int vIndex = floor(HSV.v * MODE_SUBINS);
-      HSV_S_Subhistogram[h][sIndex]++;
-      HSV_V_Subhistogram[h][vIndex]++;
+    int sIndex = floor(HSV.s * MODE_SUBINS);
+    int vIndex = floor(HSV.v * MODE_SUBINS);
+    HSV_S_Subhistogram[h][sIndex]++;
+    HSV_V_Subhistogram[h][vIndex]++;
 
-      // Gcc Computations
-      int gccBin = get_gcc_bin_for_pixel(i, image);
-      if (gccBin >= 0) {
-        metrics->Gcc[gccBin]++;
-        rgb newColor = {
-            metrics->GccMeanColor[gccBin].r + RGB.r,
-            metrics->GccMeanColor[gccBin].g + RGB.g,
-            metrics->GccMeanColor[gccBin].b + RGB.b,
-        };
-        metrics->GccMeanColor[gccBin] = newColor;
-      }
-    }
+    // Gcc Computations
+    int gccBin = get_gcc_bin_for_pixel(pixelIndex, image);
+    metrics->Gcc[gccBin]++;
+    rgb newColor = {
+        metrics->GccMeanColor[gccBin].r + RGB.r,
+        metrics->GccMeanColor[gccBin].g + RGB.g,
+        metrics->GccMeanColor[gccBin].b + RGB.b,
+    };
+    metrics->GccMeanColor[gccBin] = newColor;
   }
 
   // Finish calculation of S and V mean/mode

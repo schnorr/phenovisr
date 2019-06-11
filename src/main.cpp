@@ -98,13 +98,14 @@ DataFrame phenovis_get_metrics(StringVector images) {
   for (i = 0; i < images.size(); i++) {
     // Load the image and apply mask
     image_t *image = load_jpeg_image(std::string(images(i)).c_str());
-    if (global_mask) {
-      apply_mask(image, global_mask);
-    }
+
+    std::vector<int> unmaskedPixels = (!!global_mask) 
+      ? get_unmasked_pixels(global_mask) 
+      : get_all_pixels(image);
 
     // Calculate the HSV_H metric
     phenology_metrics_t *phenology_metrics;
-    phenology_metrics = calculate_image_metrics(image);
+    phenology_metrics = calculate_image_metrics(image, unmaskedPixels);
 
     // Push HSV_H metrics into the matrix
     for (int j=0; j < 360; j++) {
