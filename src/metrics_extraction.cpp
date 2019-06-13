@@ -54,31 +54,29 @@ phenology_metrics_t *calculate_image_metrics(image_t *image, std::vector<int> un
     int pixelIndex = unmaskedPixels[i];
     rgb RGB = get_rgb_for_pixel(pixelIndex, image);
 
-    if(!is_black(RGB)) {
-      metrics->consideredPixels++;
+    metrics->consideredPixels++;
 
-      // HSV Computations
-      hsv HSV = get_HSV_for_pixel(pixelIndex, image);
-      int h = floor(HSV.h);
-      metrics->hsv_h[h]++;
-      metrics->SMean[h] += HSV.s;
-      metrics->VMean[h] += HSV.v;
+    // HSV Computations
+    hsv HSV = get_HSV_for_pixel(pixelIndex, image);
+    int h = floor(HSV.h);
+    metrics->hsv_h[h]++;
+    metrics->SMean[h] += HSV.s;
+    metrics->VMean[h] += HSV.v;
 
-      int sIndex = floor(HSV.s * MODE_SUBINS);
-      int vIndex = floor(HSV.v * MODE_SUBINS);
-      HSV_S_Subhistogram[h][sIndex]++;
-      HSV_V_Subhistogram[h][vIndex]++;
+    int sIndex = floor(HSV.s * MODE_SUBINS);
+    int vIndex = floor(HSV.v * MODE_SUBINS);
+    HSV_S_Subhistogram[h][sIndex]++;
+    HSV_V_Subhistogram[h][vIndex]++;
 
-      // Gcc Computations
-      int gccBin = get_gcc_bin_for_pixel(pixelIndex, image);
-      metrics->Gcc[gccBin]++;
-      rgb newColor = {
-          metrics->GccMeanColor[gccBin].r + RGB.r,
-          metrics->GccMeanColor[gccBin].g + RGB.g,
-          metrics->GccMeanColor[gccBin].b + RGB.b,
-      };
-      metrics->GccMeanColor[gccBin] = newColor;
-    }
+    // Gcc Computations
+    int gccBin = get_gcc_bin_for_pixel(pixelIndex, image);
+    metrics->Gcc[gccBin]++;
+    rgb newColor = {
+        metrics->GccMeanColor[gccBin].r + RGB.r,
+        metrics->GccMeanColor[gccBin].g + RGB.g,
+        metrics->GccMeanColor[gccBin].b + RGB.b,
+    };
+    metrics->GccMeanColor[gccBin] = newColor;
   }
 
   // Finish calculation of S and V mean/mode
