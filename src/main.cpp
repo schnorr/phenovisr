@@ -65,7 +65,7 @@ DataFrame phenovis_get_mean_gcc(StringVector images) {
   // Create the resulting data frame
   DataFrame ret(matrix);
   ret.insert(ret.begin(), names);
-  columnNames.push_front("Name");
+  columnNames.push_front("Picture.Path");
   ret.attr("names") = columnNames;
   Function asDF("as.data.frame");
   return asDF(ret);
@@ -182,7 +182,7 @@ DataFrame phenovis_get_metrics(StringVector images) {
   ret.insert(ret.begin(), metricNames);
   columnNames.push_front("Metric_Type");
   ret.insert(ret.begin(), names);
-  columnNames.push_front("Name");
+  columnNames.push_front("Picture.Path");
 
   ret.attr("names") = columnNames;
   Function asDF("as.data.frame");
