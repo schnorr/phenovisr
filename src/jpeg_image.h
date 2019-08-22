@@ -1,6 +1,8 @@
 #ifndef __JPEG_IMAGE_H
 #define __JPEG_IMAGE_H
 #include <vector>
+#include <stdio.h>
+#include <stdlib.h>
 #include <jpeglib.h>
 
 typedef struct image {
