@@ -5,11 +5,19 @@ phenovis_read_mask <- function(maskname) {
     invisible(.Call(`_phenovisr_phenovis_read_mask`, maskname))
 }
 
+phenovis_read_masks <- function(maskNames) {
+    invisible(.Call(`_phenovisr_phenovis_read_masks`, maskNames))
+}
+
 phenovis_get_mean_gcc <- function(images) {
     .Call(`_phenovisr_phenovis_get_mean_gcc`, images)
 }
 
 phenovis_get_metrics <- function(images) {
     .Call(`_phenovisr_phenovis_get_metrics`, images)
+}
+
+phenovis_multimask_get_metrics <- function(images, maskIndexes) {
+    .Call(`_phenovisr_phenovis_multimask_get_metrics`, images, maskIndexes)
 }
 
