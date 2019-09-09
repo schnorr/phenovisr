@@ -28,7 +28,7 @@ void phenovis_read_masks(StringVector maskNames) {
   int i;
   for (i=0; i<maskNames.size(); i++) {
     globalMasks[i] = load_jpeg_image(std::string(maskNames(i)).c_str());
-    std::cout << "Loaded mask " << std::string(maskNames(i)) << std::endl;
+    std::cout << "Loaded mask " << std::string(maskNames(i)) << " with index " << i << std::endl;
   }
   std::cout << "Done" << std::endl;
 }
