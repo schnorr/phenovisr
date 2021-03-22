@@ -3,19 +3,10 @@
 #include "jpeg_image.h"
 #include "rgb2hsv.h"
 
-typedef struct hsv_histogram {
-  int H;       // The H coordinate
-  int count;   // The count of the given H
-  int nsubins; // How many subins of V?
-  int *V;      // A vector of nsubins with the counts of V
-}hsv_histogram_t;
-
-double get_metric (PGAMetricType type,
-		   unsigned char r,
-		   unsigned char g,
-		   unsigned char b);
-int is_black (unsigned char r,
-	      unsigned char g,
-	      unsigned char b);
+int is_black (rgb RGB);
+double get_gcc_value(rgb RGB);
+rgb get_rgb_for_pixel(int pixel, image_t *image);
+hsv get_HSV_for_pixel(int pixel, image_t *image);
+int get_gcc_bin_for_pixel(int pixel, image_t *image);
 
 #endif

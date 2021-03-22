@@ -5,46 +5,6 @@
 
 using namespace Rcpp;
 
-// phenovis_red
-int phenovis_red();
-RcppExport SEXP _phenovisr_phenovis_red() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(phenovis_red());
-    return rcpp_result_gen;
-END_RCPP
-}
-// phenovis_green
-int phenovis_green();
-RcppExport SEXP _phenovisr_phenovis_green() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(phenovis_green());
-    return rcpp_result_gen;
-END_RCPP
-}
-// phenovis_blue
-int phenovis_blue();
-RcppExport SEXP _phenovisr_phenovis_blue() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(phenovis_blue());
-    return rcpp_result_gen;
-END_RCPP
-}
-// phenovis_H
-int phenovis_H();
-RcppExport SEXP _phenovisr_phenovis_H() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(phenovis_H());
-    return rcpp_result_gen;
-END_RCPP
-}
 // phenovis_read_mask
 void phenovis_read_mask(std::string maskname);
 RcppExport SEXP _phenovisr_phenovis_read_mask(SEXP masknameSEXP) {
@@ -55,41 +15,57 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// phenovis_get_histogram
-DataFrame phenovis_get_histogram(int mtype, StringVector names, int number_of_bins);
-RcppExport SEXP _phenovisr_phenovis_get_histogram(SEXP mtypeSEXP, SEXP namesSEXP, SEXP number_of_binsSEXP) {
+// phenovis_read_masks
+void phenovis_read_masks(StringVector maskNames);
+RcppExport SEXP _phenovisr_phenovis_read_masks(SEXP maskNamesSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< StringVector >::type maskNames(maskNamesSEXP);
+    phenovis_read_masks(maskNames);
+    return R_NilValue;
+END_RCPP
+}
+// phenovis_get_mean_gcc
+DataFrame phenovis_get_mean_gcc(StringVector images);
+RcppExport SEXP _phenovisr_phenovis_get_mean_gcc(SEXP imagesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type mtype(mtypeSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type names(namesSEXP);
-    Rcpp::traits::input_parameter< int >::type number_of_bins(number_of_binsSEXP);
-    rcpp_result_gen = Rcpp::wrap(phenovis_get_histogram(mtype, names, number_of_bins));
+    Rcpp::traits::input_parameter< StringVector >::type images(imagesSEXP);
+    rcpp_result_gen = Rcpp::wrap(phenovis_get_mean_gcc(images));
     return rcpp_result_gen;
 END_RCPP
 }
-// phenovis_get_HSV_double_histogram
-DataFrame phenovis_get_HSV_double_histogram(int mtype, StringVector images, int nsubins);
-RcppExport SEXP _phenovisr_phenovis_get_HSV_double_histogram(SEXP mtypeSEXP, SEXP imagesSEXP, SEXP nsubinsSEXP) {
+// phenovis_get_metrics
+DataFrame phenovis_get_metrics(StringVector images);
+RcppExport SEXP _phenovisr_phenovis_get_metrics(SEXP imagesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type mtype(mtypeSEXP);
     Rcpp::traits::input_parameter< StringVector >::type images(imagesSEXP);
-    Rcpp::traits::input_parameter< int >::type nsubins(nsubinsSEXP);
-    rcpp_result_gen = Rcpp::wrap(phenovis_get_HSV_double_histogram(mtype, images, nsubins));
+    rcpp_result_gen = Rcpp::wrap(phenovis_get_metrics(images));
+    return rcpp_result_gen;
+END_RCPP
+}
+// phenovis_multimask_get_metrics
+DataFrame phenovis_multimask_get_metrics(StringVector images, IntegerVector maskIndexes);
+RcppExport SEXP _phenovisr_phenovis_multimask_get_metrics(SEXP imagesSEXP, SEXP maskIndexesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< StringVector >::type images(imagesSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type maskIndexes(maskIndexesSEXP);
+    rcpp_result_gen = Rcpp::wrap(phenovis_multimask_get_metrics(images, maskIndexes));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_phenovisr_phenovis_red", (DL_FUNC) &_phenovisr_phenovis_red, 0},
-    {"_phenovisr_phenovis_green", (DL_FUNC) &_phenovisr_phenovis_green, 0},
-    {"_phenovisr_phenovis_blue", (DL_FUNC) &_phenovisr_phenovis_blue, 0},
-    {"_phenovisr_phenovis_H", (DL_FUNC) &_phenovisr_phenovis_H, 0},
     {"_phenovisr_phenovis_read_mask", (DL_FUNC) &_phenovisr_phenovis_read_mask, 1},
-    {"_phenovisr_phenovis_get_histogram", (DL_FUNC) &_phenovisr_phenovis_get_histogram, 3},
-    {"_phenovisr_phenovis_get_HSV_double_histogram", (DL_FUNC) &_phenovisr_phenovis_get_HSV_double_histogram, 3},
+    {"_phenovisr_phenovis_read_masks", (DL_FUNC) &_phenovisr_phenovis_read_masks, 1},
+    {"_phenovisr_phenovis_get_mean_gcc", (DL_FUNC) &_phenovisr_phenovis_get_mean_gcc, 1},
+    {"_phenovisr_phenovis_get_metrics", (DL_FUNC) &_phenovisr_phenovis_get_metrics, 1},
+    {"_phenovisr_phenovis_multimask_get_metrics", (DL_FUNC) &_phenovisr_phenovis_multimask_get_metrics, 2},
     {NULL, NULL, 0}
 };
 

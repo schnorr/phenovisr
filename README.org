@@ -29,5 +29,5 @@ Finally, install =phenovisr= like this:
 
 #+begin_src R :results output :session :exports both
 library(devtools);
-install_github("schnorr/phenovisr");
+install_github("schnorr/phenovisr", ref="alles");
 #+end_src

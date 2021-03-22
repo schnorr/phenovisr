@@ -68,3 +68,25 @@ int apply_mask (image_t *image, image_t *mask)
   }
   return total_after_mask;
 }
+
+std::vector<int> get_unmasked_pixels (image_t *mask) {
+  std::vector<int> unmaskedPixels;
+  for(int i=0; i < mask->size; i += 3) {
+    unsigned char r = mask->image[i];
+    unsigned char g = mask->image[i+1];
+    unsigned char b = mask->image[i+2];
+
+    if(r == 255 && g == 255 && b == 255) {
+      unmaskedPixels.push_back(i);
+    }
+  }
+  return unmaskedPixels;
+}
+
+std::vector<int> get_all_pixels (image_t *image) {
+  std::vector<int> unmaskedPixels;
+  for(int i = 0; i < image->size; i += 3) {
+    unmaskedPixels.push_back(i);
+  };
+  return unmaskedPixels;
+}

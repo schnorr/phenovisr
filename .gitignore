@@ -1,0 +1,6 @@
+/.vscode
+/..Rcheck
+.DS_Store
+*.o
+*.so
+*.rds

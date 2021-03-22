@@ -1,45 +1,46 @@
 #include "metrics.h"
 
-static double get_rcc (unsigned char r, unsigned char g, unsigned char b)
-{
-  return (r+g+b) == 0 ? 0 : (double)r/(double)(r+g+b);
+int is_black (rgb RGB) {
+  return !(RGB.r + RGB.g + RGB.b);
 }
 
-static double get_gcc (unsigned char r, unsigned char g, unsigned char b)
-{
-  return (r+g+b) == 0 ? 0 : (double)g/(double)(r+g+b);
+rgb get_rgb_for_pixel(int pixel, image_t *image) {
+  unsigned char *iimage = image->image;
+  unsigned char r = iimage[pixel];
+  unsigned char g = iimage[pixel + 1];
+  unsigned char b = iimage[pixel + 2];
+
+  rgb RGB = {(double)r / 255, (double)g / 255, (double)b / 255};
+  return RGB;
 }
 
-static double get_bcc (unsigned char r, unsigned char g, unsigned char b)
-{
-  return (r+g+b) == 0 ? 0 : (double)b/(double)(r+g+b);
-}
+hsv get_HSV_for_pixel(int pixel, image_t *image) {
+  rgb RGB = get_rgb_for_pixel(pixel, image);
+  // if (is_black(RGB)) {
+  //   return {-1, -1, -1};
+  // }
 
-static double get_H (unsigned char r, unsigned char g, unsigned char b)
-{
-  double R = (double)r/255;
-  double G = (double)g/255;
-  double B = (double)b/255;
-  rgb RGB = {R, G, B};
   hsv HSV = rgb2hsv(RGB);
-  return HSV.h/360;
+  return HSV;
 }
 
-double get_metric (PGAMetricType type, unsigned char r, unsigned char g, unsigned char b)
-{
-  double ret;
-  switch (type){
-  case Red: ret = get_rcc (r, g, b); break;
-  case Green: ret = get_gcc (r, g, b); break;
-  case Blue: ret = get_bcc (r, g, b); break;
-  case H: ret = get_H (r, g, b); break;
-  case Undef:
-  default: ret = get_gcc (r, g, b); break;
+int get_gcc_bin_for_pixel(int pixel, image_t *image) {
+  rgb RGB = get_rgb_for_pixel(pixel, image);
+  int gccBin;
+  if (is_black(RGB)) {
+    // This is done to address division by zero. Since I need to consider
+    // black pixels, I will assume that for whatever value in which 
+    // R, G and B are the same (including a black pixel 0, 0, 0), the Gcc will
+    // be 1/3. The limit of x/3x when x approaches 0 is 1/3.
+    RGB = {1, 1, 1};
   }
-  return ret;
+  gccBin = floor(get_gcc_value(RGB) * 100);
+  gccBin = (gccBin >= 100) ? 99 : gccBin;
+  return gccBin;
 }
 
-int is_black (unsigned char r, unsigned char g, unsigned char b)
-{
-  return !(r+g+b);
+double get_gcc_value(rgb RGB) {
+  return (RGB.r + RGB.g + RGB.b) != 0
+    ? RGB.g / (RGB.r + RGB.g + RGB.b)
+    : 0;
 }
